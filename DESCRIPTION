@@ -1,0 +1,10 @@
+Package: asmisc
+Type: Package
+Title: Miscellaneous Utility Functions
+Version: 0.0.0.9000
+Authors@R: person("András", "Svraka", email = "svraka.andras@gmail.com",
+    role = c("aut", "cre"))
+Description: A small collection if utility functions, mostly for personal use.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
