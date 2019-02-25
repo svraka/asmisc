@@ -10,3 +10,14 @@ Description: A small collection if utility functions, mostly for personal use.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports:
+    dplyr,
+    magrittr,
+    purrr,
+    readr,
+    rlang,
+    skimr,
+    stringr,
+    tidyr,
+    utils
+RoxygenNote: 6.1.1
