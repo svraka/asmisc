@@ -2,6 +2,7 @@
 
 export(codebook)
 export(codebook_chunked)
+export(df_sizes)
 export(find_project_packages)
 export(needed_project_packages)
 importFrom(magrittr,"%>%")
