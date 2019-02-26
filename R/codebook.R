@@ -5,18 +5,12 @@
 #' @param df A data frame
 #'
 #' @return
-#' A list of three tibbles.
+#' A tibble from a custom wide format \code{\link[skimr]{skim}} output.  Unlike
+#' \code{\link[skimr]{skim}}, histograms are not generated but there are three
+#' additional columns: \code{\link[sjmisc]{is_whole}},
+#' \code{\link[sjmisc]{is_num_chr}}, and `chr_values` a list column with the
+#' first 10 unique character values.
 #'
-#' \describe{
-#'   \item{chr_cols}{A tibble of character columns from \code{df} in rows with a
-#'     vector of the first 10 unique values of the original variable.  It allows
-#'     you to inspect character columns that can actually be encoded as numeric
-#'     columns. Especially useful when the rows higher than \code{guess_max}
-#'     from \code{\link[readr]{read_delim}} contain \code{NA}s.}
-#'   \item{skims}{A tibble with the results from a customized
-#'     \code{\link[skimr]{skim}} output in a wide format}
-#'   \item{problems}{Results from \code{\link[readr]{problems}}}
-#' }
 #' @export
 #'
 #' @seealso \code{\link{codebook_chunked}} for files that are too big to be read
@@ -25,22 +19,6 @@
 #' @examples
 #' codebook(mtcars)
 codebook <- function(df) {
-  chr_cols <- df %>%
-    dplyr::select_if(is.character)
-
-  # Create empty tibble if there are no character columns
-  if (ncol(chr_cols) == 0) {
-    chr_cols <- dplyr::tibble(variable = character(), chr_values = character())
-  } else {
-    chr_cols <- chr_cols %>%
-      dplyr::summarise_all(dplyr::funs(list(unique(.) %>% sort %>%
-                                       stringr::str_subset("[^\\d]") %>%
-                                       utils::head(n = 10)))
-      ) %>%
-      tidyr::gather() %>%
-      dplyr::rename(variable = .data$key, chr_values = .data$value)
-  }
-
   # Drop histogram from `skim` results
 
   skimr::skim_with(
@@ -48,19 +26,22 @@ codebook <- function(df) {
     integer = list(hist = NULL)
   )
 
+  # Add custom skims
+
   skimr::skim_with(
-    numeric = list(is_whole = ~all(floor(.) == ., na.rm = TRUE))
+    numeric = list(is_whole = sjmisc::is_whole),
+    character = list(is_num_chr = sjmisc::is_num_chr)
   )
 
-  # Skim the data frame and spread it wide for a better overview. `skim_to_wide`
-  # outputs formatted characters, which are inconvenient, so we roll our own
-  # solution.  Additionally, the variables are sorted in the original order and
-  # not by type.
+  # Skim the data frame and spread it wide for a better overview.
+  # `skim_to_wide` outputs formatted characters, which are inconvenient, so we
+  # roll our own solution.  Additionally, the variables are sorted in the
+  # original order and not by type.
 
   varnames <- dplyr::tibble(variable = names(df)) %>%
     dplyr::mutate(var_number = dplyr::row_number())
 
-  skims <- skimr::skim(df) %>%
+  codebook <- skimr::skim(df) %>%
     unclass %>% dplyr::as_tibble() %>%
     dplyr::select(-.data$level, -.data$formatted) %>%
     tidyr::spread(key = .data$stat, value = .data$value) %>%
@@ -68,21 +49,61 @@ codebook <- function(df) {
     dplyr::arrange(.data$var_number) %>%
     dplyr::select(-.data$var_number)
 
-  # Add `is_whole` column if it was not created (in case of no double columns)
+  # Create `is_whole` and `is_num_chr` if they don't exist (in case of no
+  # double, or no character columns).
 
-  if (!rlang::has_name(skims, "is_whole")) {
-    skims <- skims %>%
+  if (!rlang::has_name(codebook, "is_whole")) {
+    codebook <- codebook %>%
       dplyr::mutate(is_whole = NA)
   }
+
+  if (!rlang::has_name(codebook, "is_num_chr")) {
+    codebook <- codebook %>%
+      dplyr::mutate(is_num_chr = NA)
+  }
+
+  # Convert both to logical
+
+  codebook <- codebook %>%
+    dplyr::mutate_at(dplyr::vars(.data$is_whole, .data$is_num_chr), as.logical)
+
+  # Add `chr_values` column
+
+  chr_values <- df %>%
+    dplyr::select_if(is.character) %>%
+    purrr::map(chr_values) %>%
+    tibble::enframe(name = "variable", value = "chr_values")
+
+  codebook <- codebook %>%
+    dplyr::left_join(chr_values, by = "variable")
 
   # Reorder columns. Some of these only exist if there are character columns and
   # others only exist if there are temporal columns.  `one_of` reorders the
   # columns as needed but issues warnings, which we suppress.
-  skims <- suppressWarnings(dplyr::select(
-      skims,
-      dplyr::one_of("variable", "type", "missing", "complete", "n", "is_whole",
-                    "min", "max", "empty", "n_unique", "mean", "sd", "median",
-                    "p0", "p25", "p50", "p75", "p100"),
+  codebook <- suppressWarnings(dplyr::select(
+      codebook,
+      dplyr::one_of(
+        "variable",
+        "type",
+        "missing",
+        "complete",
+        "n",
+        "min",
+        "max",
+        "is_num_chr",
+        "chr_values",
+        "empty",
+        "n_unique",
+        "is_whole",
+        "mean",
+        "sd",
+        "median",
+        "p0",
+        "p25",
+        "p50",
+        "p75",
+        "p100"
+      ),
       dplyr::everything()
     )
   )
@@ -91,9 +112,7 @@ codebook <- function(df) {
 
   skimr::skim_with_defaults()
 
-  problems <- readr::problems(df)
-
-  list(chr_cols = chr_cols, skims = skims, problems = problems)
+  codebook
 }
 
 #' Create codebook by chunks
@@ -111,15 +130,14 @@ codebook <- function(df) {
 #'   chunk before creating the codebook for that chunk.  There are no
 #'   restrictions what this function can be.  When left as \code{NULL}, no
 #'   processing is done.
-#' @param simplify Simplify the results.
 #' @param ... Additional arguments passed to
 #'   \code{\link[readr]{read_delim_chunked}}
 #'
-#' @return If \code{simplify} is \code{TRUE}, a list with the same structure as
-#'   \code{\link{codebook}} but each tibble has an additional column named
-#'   \code{chunk} with the number of the chunk it is describing and there are
-#'   additional rows for each variable in each chunk.  Otherwise, a list of
-#'   lists returned by \code{\link{codebook}}.
+#' @return A tibble like from \code{\link{codebook}} with number of variables
+#' \eqn{\times} number of chunks rows and an additional column named
+#' \code{chunk} containing the chunk number.  Parsing problmes by
+#' \code{\link[readr]{read_delim_chunked}} are stored in an attribute of the
+#'  tibble, which can be accessed by \code{\link[readr]{problems}}.
 #'
 #' @export
 #'
@@ -133,24 +151,25 @@ codebook_chunked <- function(file,
                               input_delim,
                               chunk_size,
                               process_function = NULL,
-                              simplify = TRUE,
                               ...) {
   if (is.null(process_function)) {
     callback_codebook <- function(x, pos) {
       problems <- readr::problems(x)
 
-      codebook(x)
+      list(codebook = codebook(x), problems = problems)
     }
   }
   else {
     callback_codebook <- function(x, pos) {
       problems <- readr::problems(x)
 
-      process_function(x) %>% codebook
+      codebook <- process_function(x) %>% codebook
+
+      list(codebook = codebook, problems = problems)
     }
   }
 
-  chunk <- read_chunked(
+  chunks <- read_chunked(
     input_delim = input_delim,
     file = file,
     chunk_size = chunk_size,
@@ -159,43 +178,10 @@ codebook_chunked <- function(file,
     ...
   )
 
-  if (simplify == TRUE) {
-    chunk <- simplify_chunked_codebook(chunk)
-  }
+  # Bind chunks and arrange by original variable order
 
-  chunk
-}
-
-#' Simplify chunked codebook
-#'
-#' Simplify a list in \code{\link{codebook_chunked}} into a list of three
-#' tibbles like the output of \code{\link{codebook}}.
-#'
-#' @param codebook A list of lists from \code{\link{codebook}}.
-#'
-#' @keywords internal
-simplify_chunked_codebook <- function(codebook) {
-  chr_cols <- codebook %>%
-    purrr::map(purrr::pluck, "chr_cols") %>%
-    dplyr::bind_rows(.id = "chunk") %>%
-    dplyr::mutate(chunk = as.integer(.data$chunk)) %>%
-    dplyr::group_by(.data$chunk) %>%
-    dplyr::mutate(var_number = dplyr::row_number()) %>%
-    dplyr::group_by(.data$variable, .data$var_number) %>%
-    dplyr::summarise(chr_values = list(.data$chr_values)) %>%
-    dplyr::mutate(
-      chr_values = purrr::map(
-        .data$chr_values,
-        function(x) unlist(x) %>% unique %>% utils::head(n = 10)
-      )
-    ) %>%
-    dplyr::arrange(.data$var_number) %>%
-    dplyr::select(-.data$var_number) %>%
-    dplyr::ungroup()
-
-  skims <- codebook %>%
-    purrr::map(purrr::pluck, "skims") %>%
-    dplyr::bind_rows(.id = "chunk") %>%
+  codebook <- chunks %>%
+    purrr::map_dfr(~purrr::pluck(., "codebook"), .id = "chunk") %>%
     dplyr::mutate(chunk = as.integer(.data$chunk)) %>%
     dplyr::group_by(.data$chunk) %>%
     dplyr::mutate(var_number = dplyr::row_number()) %>%
@@ -203,14 +189,24 @@ simplify_chunked_codebook <- function(codebook) {
     dplyr::select(-.data$var_number) %>%
     dplyr::ungroup()
 
-  problems <- codebook %>%
-    purrr::map(purrr::pluck, "problems") %>%
-    dplyr::bind_rows(.id = "chunk") %>%
+  # Bind `problems()` and set as attribute to make it accessible by
+  # `readr::problems()`.
+
+  problems <- chunks %>%
+    purrr::map_dfr(~purrr::pluck(., "problems"), .id = "chunk") %>%
     dplyr::mutate(chunk = as.integer(.data$chunk))
 
-  list(
-    chr_cols = chr_cols,
-    skims = skims,
-    problems = problems
-  )
+  attr(codebook, "problems") <- problems
+
+  n_problems <- nrow(problems)
+
+  if (n_problems != 0) {
+    warning(
+      n_problems,
+      " parsing failures. See problems(...) for more details.",
+      call. = FALSE, immediate. = TRUE, noBreaks. = TRUE
+    )
+  }
+
+  codebook
 }

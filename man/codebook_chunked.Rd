@@ -5,7 +5,7 @@
 \title{Create codebook by chunks}
 \usage{
 codebook_chunked(file, input_delim, chunk_size, process_function = NULL,
-  simplify = TRUE, ...)
+  ...)
 }
 \arguments{
 \item{file}{Path to a file.  Passed to
@@ -22,17 +22,15 @@ chunk before creating the codebook for that chunk.  There are no
 restrictions what this function can be.  When left as \code{NULL}, no
 processing is done.}
 
-\item{simplify}{Simplify the results.}
-
 \item{...}{Additional arguments passed to
 \code{\link[readr]{read_delim_chunked}}}
 }
 \value{
-If \code{simplify} is \code{TRUE}, a list with the same structure as
-  \code{\link{codebook}} but each tibble has an additional column named
-  \code{chunk} with the number of the chunk it is describing and there are
-  additional rows for each variable in each chunk.  Otherwise, a list of
-  lists returned by \code{\link{codebook}}.
+A tibble like from \code{\link{codebook}} with number of variables
+\eqn{\times} number of chunks rows and an additional column named
+\code{chunk} containing the chunk number.  Parsing problmes by
+\code{\link[readr]{read_delim_chunked}} are stored in an attribute of the
+ tibble, which can be accessed by \code{\link[readr]{problems}}.
 }
 \description{
 \code{codebook_chunked} uses \code{codebook} to create codebooks for chunks

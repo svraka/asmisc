@@ -10,18 +10,11 @@ codebook(df)
 \item{df}{A data frame}
 }
 \value{
-A list of three tibbles.
-
-\describe{
-  \item{chr_cols}{A tibble of character columns from \code{df} in rows with a
-    vector of the first 10 unique values of the original variable.  It allows
-    you to inspect character columns that can actually be encoded as numeric
-    columns. Especially useful when the rows higher than \code{guess_max}
-    from \code{\link[readr]{read_delim}} contain \code{NA}s.}
-  \item{skims}{A tibble with the results from a customized
-    \code{\link[skimr]{skim}} output in a wide format}
-  \item{problems}{Results from \code{\link[readr]{problems}}}
-}
+A tibble from a custom wide format \code{\link[skimr]{skim}} output.  Unlike
+\code{\link[skimr]{skim}}, histograms are not generated but there are three
+additional columns: \code{\link[sjmisc]{is_whole}},
+\code{\link[sjmisc]{is_num_chr}}, and `chr_values` a list column with the
+first 10 unique character values.
 }
 \description{
 Create a codebook of a data frame using \code{\link[skimr]{skim}}.

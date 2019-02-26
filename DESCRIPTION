@@ -16,8 +16,10 @@ Imports:
     purrr,
     readr,
     rlang,
+    sjmisc,
     skimr,
     stringr,
+    tibble,
     tidyr,
     utils
 RoxygenNote: 6.1.1
