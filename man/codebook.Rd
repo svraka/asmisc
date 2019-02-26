@@ -12,9 +12,9 @@ codebook(df)
 \value{
 A tibble from a custom wide format \code{\link[skimr]{skim}} output.  Unlike
 \code{\link[skimr]{skim}}, histograms are not generated but there are three
-additional columns: \code{\link[sjmisc]{is_whole}},
-\code{\link[sjmisc]{is_num_chr}}, and `chr_values` a list column with the
-first 10 unique character values.
+additional columns: \code{\link[sjmisc:is_float]{is_whole}},
+\code{\link[sjmisc:is_num_fac]{is_num_chr}}, and \code{chr_values}, a list
+ column with the first 10 unique character values.
 }
 \description{
 Create a codebook of a data frame using \code{\link[skimr]{skim}}.

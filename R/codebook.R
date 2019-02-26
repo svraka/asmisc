@@ -7,9 +7,9 @@
 #' @return
 #' A tibble from a custom wide format \code{\link[skimr]{skim}} output.  Unlike
 #' \code{\link[skimr]{skim}}, histograms are not generated but there are three
-#' additional columns: \code{\link[sjmisc]{is_whole}},
-#' \code{\link[sjmisc]{is_num_chr}}, and `chr_values` a list column with the
-#' first 10 unique character values.
+#' additional columns: \code{\link[sjmisc:is_float]{is_whole}},
+#' \code{\link[sjmisc:is_num_fac]{is_num_chr}}, and \code{chr_values}, a list
+#'  column with the first 10 unique character values.
 #'
 #' @export
 #'
@@ -118,7 +118,7 @@ codebook <- function(df) {
 #' Create codebook by chunks
 #'
 #' \code{codebook_chunked} uses \code{codebook} to create codebooks for chunks
-#' of a file, as read by \code{\link[readr]{read_delim_chunked}}.
+#' of a delimited file, as read by \code{\link[readr]{read_delim_chunked}}.
 #'
 #' @param file Path to a file.  Passed to
 #'   \code{\link[readr]{read_delim_chunked}}, see further details there.
@@ -134,7 +134,7 @@ codebook <- function(df) {
 #'   \code{\link[readr]{read_delim_chunked}}
 #'
 #' @return A tibble like from \code{\link{codebook}} with number of variables
-#' \eqn{\times} number of chunks rows and an additional column named
+#' \eqn{\times}{*} number of chunks rows and an additional column named
 #' \code{chunk} containing the chunk number.  Parsing problmes by
 #' \code{\link[readr]{read_delim_chunked}} are stored in an attribute of the
 #'  tibble, which can be accessed by \code{\link[readr]{problems}}.

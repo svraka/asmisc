@@ -27,14 +27,14 @@ processing is done.}
 }
 \value{
 A tibble like from \code{\link{codebook}} with number of variables
-\eqn{\times} number of chunks rows and an additional column named
+\eqn{\times}{*} number of chunks rows and an additional column named
 \code{chunk} containing the chunk number.  Parsing problmes by
 \code{\link[readr]{read_delim_chunked}} are stored in an attribute of the
  tibble, which can be accessed by \code{\link[readr]{problems}}.
 }
 \description{
 \code{codebook_chunked} uses \code{codebook} to create codebooks for chunks
-of a file, as read by \code{\link[readr]{read_delim_chunked}}.
+of a delimited file, as read by \code{\link[readr]{read_delim_chunked}}.
 }
 \examples{
 codebook_chunked(
