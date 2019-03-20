@@ -29,7 +29,7 @@ codebook <- function(df) {
   # Add custom skims
 
   skimr::skim_with(
-    numeric = list(is_whole = sjmisc::is_whole),
+    numeric = list(is_whole = ~all(floor(.) == ., na.rm = TRUE)),
     character = list(is_num_chr = sjmisc::is_num_chr)
   )
 
