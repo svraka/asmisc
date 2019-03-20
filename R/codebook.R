@@ -23,7 +23,8 @@ codebook <- function(df) {
 
   skimr::skim_with(
     numeric = list(hist = NULL),
-    integer = list(hist = NULL)
+    integer = list(hist = NULL),
+    logical = list(count = NULL)
   )
 
   # Add custom skims
@@ -76,6 +77,16 @@ codebook <- function(df) {
 
   codebook <- codebook %>%
     dplyr::left_join(chr_values, by = "variable")
+
+  # Add `lgl_counts` column
+
+  lgl_counts <- df %>%
+    dplyr::select_if(is.logical) %>%
+    purrr::map(skimr::sorted_count) %>%
+    tibble::enframe(name = "variable", value = "lgl_counts")
+
+  codebook <- codebook %>%
+    dplyr::left_join(lgl_counts, by = "variable")
 
   # Reorder columns. Some of these only exist if there are character columns and
   # others only exist if there are temporal columns.  `one_of` reorders the
