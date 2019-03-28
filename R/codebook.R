@@ -7,7 +7,7 @@
 #' @return
 #' A tibble from a custom wide format \code{\link[skimr]{skim}} output.  Unlike
 #' \code{\link[skimr]{skim}}, histograms are not generated but there are three
-#' additional columns: \code{\link[sjmisc:is_float]{is_whole}},
+#' additional columns: \code{is_whole},
 #' \code{\link[sjmisc:is_num_fac]{is_num_chr}}, and \code{chr_values}, a list
 #'  column with the first 10 unique character values.
 #'
@@ -19,12 +19,14 @@
 #' @examples
 #' codebook(mtcars)
 codebook <- function(df) {
-  # Drop histogram from `skim` results
+  # Drop histogram from `skim` results.  Counts for logicals and factor will be
+  # added as separate list columns.
 
   skimr::skim_with(
     numeric = list(hist = NULL),
     integer = list(hist = NULL),
-    logical = list(count = NULL)
+    logical = list(count = NULL),
+    factor = list(top_counts = NULL)
   )
 
   # Add custom skims
@@ -88,6 +90,16 @@ codebook <- function(df) {
   codebook <- codebook %>%
     dplyr::left_join(lgl_counts, by = "variable")
 
+  # Add `fct_counts` column
+
+  fct_counts <- df %>%
+    dplyr::select_if(is.factor) %>%
+    purrr::map(skimr::sorted_count) %>%
+    tibble::enframe(name = "variable", value = "fct_counts")
+
+  codebook <- codebook %>%
+    dplyr::left_join(fct_counts, by = "variable")
+
   # Reorder columns. Some of these only exist if there are character columns and
   # others only exist if there are temporal columns.  `one_of` reorders the
   # columns as needed but issues warnings, which we suppress.
@@ -113,7 +125,9 @@ codebook <- function(df) {
         "p25",
         "p50",
         "p75",
-        "p100"
+        "p100",
+        "lgl_counts",
+        "fct_counts"
       ),
       dplyr::everything()
     )
