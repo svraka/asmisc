@@ -11,8 +11,8 @@ A small collection if utility functions, mostly for personal use.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://gitlab.com/svraka/asmisc}
-  \item Report bugs at \url{https://gitlab.com/svraka/asmisc/issues}
+  \item \url{https://github.com/svraka/asmisc}
+  \item Report bugs at \url{https://github.com/svraka/asmisc/issues}
 }
 
 }

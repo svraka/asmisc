@@ -4,8 +4,8 @@ Title: Miscellaneous Utility Functions
 Version: 0.1.0
 Authors@R: person("András", "Svraka", email = "svraka.andras@gmail.com",
     role = c("aut", "cre"))
-URL: https://gitlab.com/svraka/asmisc
-BugReports: https://gitlab.com/svraka/asmisc/issues
+URL: https://github.com/svraka/asmisc
+BugReports: https://github.com/svraka/asmisc/issues
 Description: A small collection if utility functions, mostly for personal use.
 License: MIT + file LICENSE
 Encoding: UTF-8

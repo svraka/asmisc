@@ -4,8 +4,8 @@ A small collection if utility functions, mostly for personal use.
 
 ## Installation
 
-You can install  asmisc from [Gitlab](https://gitlab.com/svraka/asmisc) with:
+You can install  asmisc from [Github](https://github.com/svraka/asmisc) with:
 
 ``` r
-remotes::install_gitlab("svraka/asmisc")
+remotes::install_github("svraka/asmisc")
 ```
