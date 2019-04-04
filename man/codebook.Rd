@@ -11,10 +11,20 @@ codebook(df)
 }
 \value{
 A tibble from a custom wide format \code{\link[skimr]{skim}} output.  Unlike
-\code{\link[skimr]{skim}}, histograms are not generated but there are three
-additional columns: \code{\link[sjmisc:is_float]{is_whole}},
-\code{\link[sjmisc:is_num_fac]{is_num_chr}}, and \code{chr_values}, a list
- column with the first 10 unique character values.
+\code{\link[skimr]{skim}}, histograms are not generated but there are
+additional columns:
+
+\describe{
+  \item{\code{is_whole}}{Logical, whether a numeric variable has only whole
+    values.}
+  \item{\code{\link[sjmisc:is_num_fac]{is_num_chr}}}{Logical, whether a
+    character column has only numeric values.}
+  \item{\code{chr_values}}{A list column with the first 10 unique character
+    values.}
+  \item{\code{lgl_counts}}{A list column with counts of logical levels.}
+  \item{\code{fct_counts}}{A list column with counts of factor levels.}
+
+}
 }
 \description{
 Create a codebook of a data frame using \code{\link[skimr]{skim}}.
