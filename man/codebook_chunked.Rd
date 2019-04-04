@@ -4,14 +4,13 @@
 \alias{codebook_chunked}
 \title{Create codebook by chunks}
 \usage{
-codebook_chunked(file, input_delim, chunk_size, process_function = NULL,
-  ...)
+codebook_chunked(file, delim, chunk_size, process_function = NULL, ...)
 }
 \arguments{
 \item{file}{Path to a file.  Passed to
 \code{\link[readr]{read_delim_chunked}}, see further details there.}
 
-\item{input_delim}{Single character used to separate fields within a record.}
+\item{delim}{Single character used to separate fields within a record.}
 
 \item{chunk_size}{The number of rows to include in each chunk.  See
 \code{\link[readr]{read_delim_chunked}}}
@@ -39,7 +38,7 @@ of a delimited file, as read by \code{\link[readr]{read_delim_chunked}}.
 \examples{
 codebook_chunked(
   file = readr::readr_example("mtcars.csv"),
-  input_delim = ",",
+  delim = ",",
   chunk_size = 10
 )
 }

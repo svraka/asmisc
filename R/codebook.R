@@ -147,7 +147,7 @@ codebook <- function(df) {
 #'
 #' @param file Path to a file.  Passed to
 #'   \code{\link[readr]{read_delim_chunked}}, see further details there.
-#' @param input_delim Single character used to separate fields within a record.
+#' @param delim Single character used to separate fields within a record.
 #' @param chunk_size The number of rows to include in each chunk.  See
 #'   \code{\link[readr]{read_delim_chunked}}
 #' @param process_function A function that takes a data frame as its input and
@@ -169,14 +169,14 @@ codebook <- function(df) {
 #' @examples
 #' codebook_chunked(
 #'   file = readr::readr_example("mtcars.csv"),
-#'   input_delim = ",",
+#'   delim = ",",
 #'   chunk_size = 10
 #' )
 codebook_chunked <- function(file,
-                              input_delim,
-                              chunk_size,
-                              process_function = NULL,
-                              ...) {
+                             delim,
+                             chunk_size,
+                             process_function = NULL,
+                             ...) {
   if (is.null(process_function)) {
     callback_codebook <- function(x, pos) {
       problems <- readr::problems(x)
@@ -194,11 +194,13 @@ codebook_chunked <- function(file,
     }
   }
 
-  chunks <- read_chunked(
-    input_delim = input_delim,
+  chunks <- readr::read_delim_chunked(
     file = file,
+    delim = delim,
     chunk_size = chunk_size,
     guess_max = chunk_size,
+    trim_ws = TRUE, # Change from `readr::read_delim() to match
+                    #`readr::read_csv() behaviour.
     readr::ListCallback$new(callback_codebook),
     ...
   )
