@@ -1,7 +1,7 @@
 Package: asmisc
 Type: Package
 Title: Miscellaneous Utility Functions
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("András", "Svraka", email = "svraka.andras@gmail.com",
     role = c("aut", "cre"))
 URL: https://github.com/svraka/asmisc
