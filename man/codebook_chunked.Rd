@@ -4,7 +4,8 @@
 \alias{codebook_chunked}
 \title{Create codebook by chunks}
 \usage{
-codebook_chunked(file, delim, chunk_size, process_function = NULL, ...)
+codebook_chunked(file, delim, chunk_size, process_function = NULL,
+  trim_ws = TRUE, ...)
 }
 \arguments{
 \item{file}{Path to a file.  Passed to
@@ -20,6 +21,9 @@ processes this data frame.  \code{process_function} is applied to each
 chunk before creating the codebook for that chunk.  There are no
 restrictions what this function can be.  When left as \code{NULL}, no
 processing is done.}
+
+\item{trim_ws}{Defaults to \code{TRUE} to mimic \code{\link[readr]{read_csv}}
+behaviour.}
 
 \item{...}{Additional arguments passed to
 \code{\link[readr]{read_delim_chunked}}}

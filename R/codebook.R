@@ -165,6 +165,8 @@ codebook <- function(df) {
 #'   chunk before creating the codebook for that chunk.  There are no
 #'   restrictions what this function can be.  When left as \code{NULL}, no
 #'   processing is done.
+#' @param trim_ws Defaults to \code{TRUE} to mimic \code{\link[readr]{read_csv}}
+#'   behaviour.
 #' @param ... Additional arguments passed to
 #'   \code{\link[readr]{read_delim_chunked}}
 #'
@@ -186,6 +188,7 @@ codebook_chunked <- function(file,
                              delim,
                              chunk_size,
                              process_function = NULL,
+                             trim_ws = TRUE,
                              ...) {
   if (is.null(process_function)) {
     callback_codebook <- function(x, pos) {
@@ -209,8 +212,7 @@ codebook_chunked <- function(file,
     delim = delim,
     chunk_size = chunk_size,
     guess_max = chunk_size,
-    trim_ws = TRUE, # Change from `readr::read_delim() to match
-                    #`readr::read_csv() behaviour.
+    trim_ws = trim_ws,
     readr::ListCallback$new(callback_codebook),
     ...
   )
