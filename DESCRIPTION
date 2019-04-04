@@ -18,6 +18,7 @@ Imports:
     rlang,
     sjmisc,
     skimr,
+    stringi,
     stringr,
     tibble,
     tidyr,
