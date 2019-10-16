@@ -20,10 +20,17 @@ yesno_to_logical <- function(x,
     stop("`yn` needs two distinct elements.")
   }
 
-  # Check for `x` values not in `yn`. `sort()` drops NAs, so this suffices.
-  if (!all(sort(unique(x)) == sort(yn))) (
-    stop("`x` contains non-NA values not found in `yn`")
-  )
+  # Check for `x` values not in `yn`. `sort()` drops NAs, so this
+  # suffices.
+  x_values <- sort(unique(x))
+
+  if (length(x_values) != 2){
+    stop("`x` contains more than two distinct non-NA values.")
+  }
+  if (!all(x_values == sort(yn))) {
+    stop("`x` contains non-NA values not found in `yn`.")
+  }
+
 
   # We only want to match complete strings
   yn <- stringr::str_c("^", yn, "$")
@@ -51,23 +58,28 @@ mark_to_logical <- function(x,
                             mark = "X",
                             na_to_false = FALSE) {
   # Make sure `mark` is sensible.
-  stopifnot(
-    (length(mark) == 1),
-    (is.character(mark))
-  )
+  if (!((length(mark) == 1) & (is.character(mark)))) {
+    stop("`mark` must be character vector of length 1.")
+  }
 
   # Check for values in `x`. `sort()` drops NAs, so this suffices.
-  if (sort(unique(x)) != mark) {
-    stop("`x` contains non-NA values other than mark")
+  x_values <- sort(unique(x))
+  morevalues_error <- "`x` contains non-NA values other than `mark`."
+
+  if (length(x_values) != 1) {
+    stop(morevalues_error)
+  }
+  if (x_values != mark) {
+    stop(morevalues_error)
   }
 
   # We only want to match complete strings
   mark <- stringr::str_c("^", mark, "$")
 
   x <- stringr::str_replace(x, mark, "TRUE")
- 
+
   if (na_to_false == TRUE) x <- stringr::str_replace_na(x, "FALSE")
- 
+
   as.logical(x)
 }
 
@@ -111,7 +123,7 @@ parse_date_ymd <- function(x, orders = "%y%m%d", cutoff_2000 = 30L) {
     orders = orders,
     cutoff_2000 = cutoff_2000
   )
- 
+
   # lubridate::parse_date_time2 returns POSIXct
   x <- as.Date(x)
 
