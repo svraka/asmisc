@@ -34,6 +34,14 @@ test_that("`yesno_to_logical()` handles NA correctly", {
     yesno_to_logical(c("I", "N", NA), na_to_false = TRUE),
     c(TRUE, FALSE, FALSE)
   )
+  expect_identical(
+    yesno_to_logical(c(NA_character_)),
+    c(NA)
+  )
+  expect_identical(
+    yesno_to_logical(c(NA_character_), na_to_false = TRUE),
+    c(FALSE)
+  )
 })
 
 test_that("`mark_to_logical()` fails on wrong input", {
@@ -59,5 +67,13 @@ test_that("`mark_to_logical()` handles NA correctly", {
   expect_identical(
     mark_to_logical(c("X", "X", NA), na_to_false = TRUE),
     c(TRUE, TRUE, FALSE)
+  )
+  expect_identical(
+    mark_to_logical(c(NA_character_)),
+    c(NA)
+  )
+  expect_identical(
+    mark_to_logical(c(NA_character_), na_to_false = TRUE),
+    c(FALSE)
   )
 })

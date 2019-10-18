@@ -24,13 +24,14 @@ yesno_to_logical <- function(x,
   # suffices.
   x_values <- sort(unique(x))
 
-  if (length(x_values) != 2){
-    stop("`x` contains more than two distinct non-NA values.")
+  if (sjmisc::is_empty(x_values) == FALSE) {
+    if (length(x_values) != 2){
+      stop("`x` contains more than two distinct non-NA values.")
+    }
+    if (!all(x_values == sort(yn))) {
+      stop("`x` contains non-NA values not found in `yn`.")
+    }
   }
-  if (!all(x_values == sort(yn))) {
-    stop("`x` contains non-NA values not found in `yn`.")
-  }
-
 
   # We only want to match complete strings
   yn <- stringr::str_c("^", yn, "$")
@@ -66,11 +67,13 @@ mark_to_logical <- function(x,
   x_values <- sort(unique(x))
   morevalues_error <- "`x` contains non-NA values other than `mark`."
 
-  if (length(x_values) != 1) {
-    stop(morevalues_error)
-  }
-  if (x_values != mark) {
-    stop(morevalues_error)
+  if (sjmisc::is_empty(x_values) == FALSE) {
+    if (length(x_values) != 1) {
+      stop(morevalues_error)
+    }
+    if (x_values != mark) {
+      stop(morevalues_error)
+    }
   }
 
   # We only want to match complete strings
