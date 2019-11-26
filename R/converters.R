@@ -25,10 +25,10 @@ yesno_to_logical <- function(x,
   x_values <- sort(unique(x))
 
   if (sjmisc::is_empty(x_values) == FALSE) {
-    if (length(x_values) != 2){
+    if (length(x_values) > 2){
       stop("`x` contains more than two distinct non-NA values.")
     }
-    if (!all(x_values == sort(yn))) {
+    if (!all(x_values %in% yn)) {
       stop("`x` contains non-NA values not found in `yn`.")
     }
   }

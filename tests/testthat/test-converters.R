@@ -25,6 +25,13 @@ test_that("`yesno_to_logical()` fails on wrong input", {
   )
 })
 
+test_that("`yesno_to_logical()` handles input with single unique value", {
+  expect_identical(
+    yesno_to_logical(x <- c("I", "I", "I")),
+    c(TRUE, TRUE, TRUE)
+  )
+})
+
 test_that("`yesno_to_logical()` handles NA correctly", {
   expect_identical(
     yesno_to_logical(c("I", "N", NA)),
