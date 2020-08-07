@@ -42,3 +42,54 @@ metadata_parquet <- function(file) {
 
   df
 }
+
+read_delim_chunked_to_dataset <- function(file,
+                                          dataset_base_name,
+                                          csv_nrow, chunk_size,
+                                          chunk_col_name = "chunk",
+                                          chunk_file_name = "data.parquet",
+                                          ...) {
+  # Prepare directory structure. In order to prevent conflicing
+  # chunks, first we clean up everything.
+  if (dir.exists(dataset_base_name)) unlink(dataset_base_name, recursive = TRUE)
+  dir.create(dataset_base_name)
+
+  chunk_paths <- get_chunk_paths(dataset_base_name, csv_nrow,
+                                 chunk_size, chunk_col_name,
+                                 chunk_file_name)
+
+  # Partitioning directories need be created recursively
+  purrr::walk(dirname(chunk_paths), dir.create)
+
+  read_delim_chunked(
+    file,
+    callback = callback_write_parquet(chunk_paths, chunk_size),
+    chunk_size = chunk_size,
+    ...
+  )
+}
+
+chunked_hive_partition_names <- function(name = "chunk", n) {
+  partitions <- strinr::str_pad(seq_len(length(n)), width = max_nchar,
+                                side = "left", pad = "0")
+}
+
+get_chunk_paths <- function(dataset_base_name, csv_nrow, chunk_size,
+                            chunk_col_name = "chunk",
+                            chunk_file_name = "data.parquet") {
+  chunk_numbers <- seq_len((csv_nrow %/% chunk_size) + 1)
+  max_nchar <- nchar(as.character(max(chunk_numbers)))
+  chunk_numbers <- stringr::str_pad(chunk_numbers, width = max_nchar,
+                                    side = "left", pad = "0")
+
+  hive_name <- paste0(chunk_col_name, "=", chunk_numbers)
+
+  file.path(dataset_base_name, hive_name, chunk_file_name)
+}
+
+callback_write_parquet <- function(chunk_paths, chunk_size) {
+  function(x, pos) {
+    chunk_number <- (pos %/% chunk_size) + 1
+    arrow::write_parquet(x, sink = chunk_paths[chunk_number])
+  }
+}
