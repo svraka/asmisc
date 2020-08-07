@@ -46,6 +46,7 @@ metadata_parquet <- function(file) {
 read_delim_chunked_to_dataset <- function(file,
                                           dataset_base_name,
                                           csv_nrow, chunk_size,
+                                          processing_function = NULL,
                                           chunk_col_name = "chunk",
                                           chunk_file_name = "data.parquet",
                                           ...) {
@@ -63,7 +64,8 @@ read_delim_chunked_to_dataset <- function(file,
 
   read_delim_chunked(
     file,
-    callback = callback_write_parquet(chunk_paths, chunk_size),
+    callback = callback_write_parquet(chunk_paths, chunk_size,
+                                      processing_function),
     chunk_size = chunk_size,
     ...
   )
@@ -90,6 +92,11 @@ get_chunk_paths <- function(dataset_base_name, csv_nrow, chunk_size,
 callback_write_parquet <- function(chunk_paths, chunk_size) {
   function(x, pos) {
     chunk_number <- (pos %/% chunk_size) + 1
+
+    if (!is.null(processing_function)) {
+      x <- processing_function(x)
+    }
+
     arrow::write_parquet(x, sink = chunk_paths[chunk_number])
   }
 }
