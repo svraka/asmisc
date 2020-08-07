@@ -62,13 +62,15 @@ read_delim_chunked_to_dataset <- function(file,
   # Partitioning directories need be created recursively
   purrr::walk(dirname(chunk_paths), dir.create)
 
-  read_delim_chunked(
+  out <- read_delim_chunked(
     file,
     callback = callback_write_parquet(chunk_paths, chunk_size,
                                       processing_function),
     chunk_size = chunk_size,
     ...
   )
+
+  invisible(out)
 }
 
 chunked_hive_partition_names <- function(name = "chunk", n) {
