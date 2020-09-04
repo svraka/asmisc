@@ -1,3 +1,8 @@
+tlmgr_install_svraka_pkgs <- function() {
+  pkgs <- readLines(system.file(package = "asmisc", "pkgs-svraka.txt"))
+  tinytex::tlmgr_install(pkgs)
+}
+
 #' Helper function to list top values of a character vector
 #'
 #' List the first 10 unique values of a character vector.
