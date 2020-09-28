@@ -43,3 +43,25 @@ test_that("A roundtrip from file to dataset does not change any data", {
     check.attributes = FALSE
   )
 })
+
+test_that("Determining chunk paths is correct", {
+  expect_identical(
+    get_chunk_paths(dataset_path, 10, 5),
+    file.path(dataset_path, sprintf("chunk=%d", 1:2), "data.parquet")
+  )
+
+  expect_identical(
+    get_chunk_paths(dataset_path, 50, 5),
+    file.path(dataset_path, sprintf("chunk=%02d", 1:10), "data.parquet")
+  )
+
+  expect_identical(
+    get_chunk_paths(dataset_path, 50, 50),
+    file.path(dataset_path, sprintf("chunk=%d", 1), "data.parquet")
+  )
+
+  expect_identical(
+    get_chunk_paths(dataset_path, 50, 51),
+    file.path(dataset_path, sprintf("chunk=%d", 1), "data.parquet")
+  )
+})
