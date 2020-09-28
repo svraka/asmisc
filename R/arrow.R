@@ -45,7 +45,7 @@ metadata_parquet <- function(file) {
 
 read_delim_chunked_to_dataset <- function(file,
                                           dataset_base_name,
-                                          csv_nrow, chunk_size,
+                                          file_nrow, chunk_size,
                                           processing_function = NULL,
                                           chunk_col_name = "chunk",
                                           chunk_file_name = "data.parquet",
@@ -55,7 +55,7 @@ read_delim_chunked_to_dataset <- function(file,
   if (dir.exists(dataset_base_name)) unlink(dataset_base_name, recursive = TRUE)
   dir.create(dataset_base_name)
 
-  chunk_paths <- get_chunk_paths(dataset_base_name, csv_nrow,
+  chunk_paths <- get_chunk_paths(dataset_base_name, file_nrow,
                                  chunk_size, chunk_col_name,
                                  chunk_file_name)
 
@@ -78,10 +78,10 @@ chunked_hive_partition_names <- function(name = "chunk", n) {
                                 side = "left", pad = "0")
 }
 
-get_chunk_paths <- function(dataset_base_name, csv_nrow, chunk_size,
+get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
                             chunk_col_name = "chunk",
                             chunk_file_name = "data.parquet") {
-  chunk_numbers <- seq_len((csv_nrow %/% chunk_size) + 1)
+  chunk_numbers <- seq_len((file_nrow %/% chunk_size) + 1)
   max_nchar <- nchar(as.character(max(chunk_numbers)))
   chunk_numbers <- stringr::str_pad(chunk_numbers, width = max_nchar,
                                     side = "left", pad = "0")
