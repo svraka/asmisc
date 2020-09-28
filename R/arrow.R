@@ -91,7 +91,8 @@ get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
   file.path(dataset_base_name, hive_name, chunk_file_name)
 }
 
-callback_write_parquet <- function(chunk_paths, chunk_size) {
+callback_write_parquet <- function(chunk_paths, chunk_size,
+                                   processing_function = NULL) {
   function(x, pos) {
     chunk_number <- (pos %/% chunk_size) + 1
 
