@@ -96,7 +96,7 @@ read_delim_chunked_to_dataset <- function(file,
   # Partitioning directories need be created recursively
   purrr::walk(dirname(chunk_paths), dir.create)
 
-  out <- read_delim_chunked(
+  out <- readr::read_delim_chunked(
     file,
     callback = callback_write_parquet(chunk_paths, chunk_size,
                                       processing_function),
