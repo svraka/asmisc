@@ -81,7 +81,7 @@ chunked_hive_partition_names <- function(name = "chunk", n) {
 get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
                             chunk_col_name = "chunk",
                             chunk_file_name = "data.parquet") {
-  chunk_numbers <- seq_len((file_nrow %/% chunk_size) + 1)
+  chunk_numbers <- seq_len(ceiling(file_nrow / chunk_size))
   max_nchar <- nchar(as.character(max(chunk_numbers)))
   chunk_numbers <- stringr::str_pad(chunk_numbers, width = max_nchar,
                                     side = "left", pad = "0")
