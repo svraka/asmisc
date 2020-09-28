@@ -43,6 +43,40 @@ metadata_parquet <- function(file) {
   df
 }
 
+#' Read a delimited file by chunks and write into Hive-style Parquet files
+#'
+#' Read a single delimited file in chunks using
+#' \code{\link[readr]{read_delim_chunked}} and save chunks in Parquet
+#' files under a simple Hive-style partitioned directory (i.e.
+#' \code{dataset_base_name/chunk=XX/data.parquet}) to be used as the
+#' source of a multi-file Apache Arrow dataset.
+#'
+#' @inheritParams readr::read_delim_chunked
+#' @param dataset_base_name Path of the directory to write the Hive
+#'   partitioned Parquet files to.
+#' @param file_nrow Number of rows in \code{file}. As there is no
+#'   reliable and cross-platform way to get the exact number of lines
+#'   in a compressed file, this has to be set manually to calculate
+#'   the number of chunks and the names of partitions. Use \code{wc}
+#'   on a Unix-like system to determine row count (\code{zcat file.gz
+#'   | wc -l}, or similar).
+#' @param processing_function A function that takes each chunk and
+#'   does arbitrary data processing on it before writing it into its
+#'   Parquet partition.
+#' @param chunk_col_name Name of the column indicating partition
+#'   numbers in the Hive-style partition structure.
+#' @param chunk_file_name Name of the individual Parquet files in the
+#'   Hive-style partition structure.
+#' @param ... Passed to \code{\link[readr]{read_delim_chunked}}
+#'
+#' @details The main goal of this function is to read a single, large,
+#'   unpartitioned delimited file into an Arrow dataset on a RAM
+#'   limited machine.
+#'
+#' @seealso \code{vignette(topic = "dataset", package = "arrow")} on
+#' how to use mult-file Apache Arrow datasets.
+#'
+#' @export
 read_delim_chunked_to_dataset <- function(file,
                                           dataset_base_name,
                                           file_nrow, chunk_size,
@@ -73,6 +107,14 @@ read_delim_chunked_to_dataset <- function(file,
   invisible(out)
 }
 
+#' Create Hive-style partition paths
+#'
+#' To be used with \code{\link{read_delim_chunked_to_dataset}}.
+#'
+#' @inheritParams read_delim_chunked_to_dataset
+#'
+#' @return A character vector with the paths to the partitions.
+#' @keywords internal
 get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
                             chunk_col_name = "chunk",
                             chunk_file_name = "data.parquet") {
@@ -86,6 +128,18 @@ get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
   file.path(dataset_base_name, hive_name, chunk_file_name)
 }
 
+#' Callback function to write Parquet partition
+#'
+#' A function factory that creates a callback function for
+#' \code{\link[readr]{read_delim_chunked}}.
+#'
+#' @inheritParams read_delim_chunked_to_dataset
+#'
+#' @return A function to be used in
+#'   \code{\link{read_delim_chunked_to_dataset}}.
+#'
+#' @seealso \url{https://stackoverflow.com/a/49241426}
+#' @keywords internal
 callback_write_parquet <- function(chunk_paths, chunk_size,
                                    processing_function = NULL) {
   function(x, pos) {
