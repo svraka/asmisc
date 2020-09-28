@@ -73,11 +73,6 @@ read_delim_chunked_to_dataset <- function(file,
   invisible(out)
 }
 
-chunked_hive_partition_names <- function(name = "chunk", n) {
-  partitions <- strinr::str_pad(seq_len(length(n)), width = max_nchar,
-                                side = "left", pad = "0")
-}
-
 get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
                             chunk_col_name = "chunk",
                             chunk_file_name = "data.parquet") {
