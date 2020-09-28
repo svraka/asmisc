@@ -50,7 +50,7 @@ read_delim_chunked_to_dataset <- function(file,
                                           chunk_col_name = "chunk",
                                           chunk_file_name = "data.parquet",
                                           ...) {
-  # Prepare directory structure. In order to prevent conflicing
+  # Prepare directory structure. In order to prevent conflicting
   # chunks, first we clean up everything.
   if (dir.exists(dataset_base_name)) unlink(dataset_base_name, recursive = TRUE)
   dir.create(dataset_base_name)
