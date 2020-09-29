@@ -44,8 +44,8 @@ on a Unix-like system to determine row count (\code{zcat file.gz
 \item{chunk_size}{The number of rows to include in each chunk}
 
 \item{processing_function}{A function that takes each chunk and
-does arbitrary data processing on it before writing it into its
-Parquet partition.}
+does arbitrary data processing on it before writing the resulting
+data frame into its Parquet partition.}
 
 \item{chunk_col_name}{Name of the column indicating partition
 numbers in the Hive-style partition structure.}
@@ -69,8 +69,16 @@ source of a multi-file Apache Arrow dataset.
 }
 \details{
 The main goal of this function is to read a single, large,
-  unpartitioned delimited file into an Arrow dataset on a RAM
-  limited machine.
+  unpartitioned delimited file into a partitioned Arrow dataset on
+  a RAM limited machine. Therefore these Arrow partitions have no
+  inherent meaning. Although \code{processing_function} allows
+  flexible changes during reading in, this function was intended to
+  be used in workflows where only minimal data processing is done
+  and the original structure of the delimited files is kept
+  unchanged. Thus \code{read_delim_chunked_to_dataset} will create
+  a partitioning that keeps the original row order from the
+  delimited file. However, within partition ordering can be changed
+  through \code{processing_function}.
 }
 \seealso{
 \code{vignette(topic = "dataset", package = "arrow")} on

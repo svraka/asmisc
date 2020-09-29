@@ -61,8 +61,8 @@ metadata_parquet <- function(file) {
 #'   on a Unix-like system to determine row count (\code{zcat file.gz
 #'   | wc -l}, or similar).
 #' @param processing_function A function that takes each chunk and
-#'   does arbitrary data processing on it before writing it into its
-#'   Parquet partition.
+#'   does arbitrary data processing on it before writing the resulting
+#'   data frame into its Parquet partition.
 #' @param chunk_col_name Name of the column indicating partition
 #'   numbers in the Hive-style partition structure.
 #' @param chunk_file_name Name of the individual Parquet files in the
@@ -70,8 +70,16 @@ metadata_parquet <- function(file) {
 #' @param ... Passed to \code{\link[readr]{read_delim_chunked}}
 #'
 #' @details The main goal of this function is to read a single, large,
-#'   unpartitioned delimited file into an Arrow dataset on a RAM
-#'   limited machine.
+#'   unpartitioned delimited file into a partitioned Arrow dataset on
+#'   a RAM limited machine. Therefore these Arrow partitions have no
+#'   inherent meaning. Although \code{processing_function} allows
+#'   flexible changes during reading in, this function was intended to
+#'   be used in workflows where only minimal data processing is done
+#'   and the original structure of the delimited files is kept
+#'   unchanged. Thus \code{read_delim_chunked_to_dataset} will create
+#'   a partitioning that keeps the original row order from the
+#'   delimited file. However, within partition ordering can be changed
+#'   through \code{processing_function}.
 #'
 #' @return Invisibly return a tibble with parsing problems caught by
 #'   \pkg{readr} (see \code{\link[readr]{problems}}). \code{NULL} if
@@ -124,6 +132,9 @@ get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
                             chunk_col_name = "chunk",
                             chunk_file_name = "data.parquet") {
   chunk_numbers <- seq_len(ceiling(file_nrow / chunk_size))
+
+  # Pad partition numbers with zeros to keep the dataset's ordering
+  # after reading with back `open_dataset()`
   max_nchar <- nchar(as.character(max(chunk_numbers)))
   chunk_numbers <- stringr::str_pad(chunk_numbers, width = max_nchar,
                                     side = "left", pad = "0")

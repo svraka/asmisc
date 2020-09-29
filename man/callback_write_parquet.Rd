@@ -10,8 +10,8 @@ callback_write_parquet(chunk_paths, chunk_size, processing_function = NULL)
 \item{chunk_size}{The number of rows to include in each chunk}
 
 \item{processing_function}{A function that takes each chunk and
-does arbitrary data processing on it before writing it into its
-Parquet partition.}
+does arbitrary data processing on it before writing the resulting
+data frame into its Parquet partition.}
 }
 \value{
 A function to be used in
