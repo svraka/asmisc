@@ -55,6 +55,11 @@ Hive-style partition structure.}
 
 \item{...}{Passed to \code{\link[readr]{read_delim_chunked}}}
 }
+\value{
+Invisibly return a tibble with parsing problems caught by
+  \pkg{readr} (see \code{\link[readr]{problems}}). \code{NULL} if
+  no parsing problems occurred.
+}
 \description{
 Read a single delimited file in chunks using
 \code{\link[readr]{read_delim_chunked}} and save chunks in Parquet

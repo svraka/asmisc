@@ -73,6 +73,10 @@ metadata_parquet <- function(file) {
 #'   unpartitioned delimited file into an Arrow dataset on a RAM
 #'   limited machine.
 #'
+#' @return Invisibly return a tibble with parsing problems caught by
+#'   \pkg{readr} (see \code{\link[readr]{problems}}). \code{NULL} if
+#'   no parsing problems occurred.
+#'
 #' @seealso \code{vignette(topic = "dataset", package = "arrow")} on
 #' how to use mult-file Apache Arrow datasets.
 #'
@@ -98,13 +102,14 @@ read_delim_chunked_to_dataset <- function(file,
 
   out <- readr::read_delim_chunked(
     file,
-    callback = callback_write_parquet(chunk_paths, chunk_size,
-                                      processing_function),
+    callback = readr::DataFrameCallback$new(
+      callback_write_parquet(chunk_paths, chunk_size, processing_function)
+    ),
     chunk_size = chunk_size,
     ...
   )
 
-  invisible(out)
+  warn_problems(out)
 }
 
 #' Create Hive-style partition paths
@@ -145,10 +150,39 @@ callback_write_parquet <- function(chunk_paths, chunk_size,
   function(x, pos) {
     chunk_number <- (pos %/% chunk_size) + 1
 
+    problems <- readr::problems(x)
+
     if (!is.null(processing_function)) {
       x <- processing_function(x)
     }
 
     arrow::write_parquet(x, sink = chunk_paths[chunk_number])
+
+    return(problems)
+  }
+}
+
+#' Report parsing failures
+#'
+#' Helper function to return parsing failures caught by \pkg{readr} in
+#' \code{\link{read_delim_chunked_to_dataset}}. Idea taken from an
+#' unexported function in \pkg{readr} (\code{warn_problems}) but
+#' implementation is much simplified here.
+#'
+#' @param x A data frame
+#' @keywords internal
+warn_problems <- function(x) {
+  n_problems <- nrow(x)
+
+  if (n_problems != 0) {
+    warning(
+      n_problems, " parsing failure", if (n_problems > 1) "s", ".\n",
+      paste(format(x), collapse = "\n"),
+      call. = FALSE, immediate. = TRUE, noBreaks. = TRUE
+    )
+
+    invisible(x)
+  } else {
+    invisible(NULL)
   }
 }
