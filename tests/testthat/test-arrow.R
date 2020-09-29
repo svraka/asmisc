@@ -44,6 +44,21 @@ test_that("A roundtrip from file to dataset does not change any data", {
   )
 })
 
+test_that("Parsing warnings are not silenced", {
+  df <- readr::read_csv(file)
+
+  expect_warning(
+    res <- read_delim_chunked_to_dataset(file, dataset_path,
+                                  file_nrow = nrow(df),
+                                  chunk_size = 5, delim = ",",
+                                  col_types = paste0(rep("i", 11),
+                                                     collapse = "")),
+    regexp = "\\d+ parsing failures."
+  )
+
+  expect_true(is.data.frame(res) && nrow(res) > 0)
+})
+
 test_that("Determining chunk paths is correct", {
   expect_identical(
     get_chunk_paths(dataset_path, 10, 5),
