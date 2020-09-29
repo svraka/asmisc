@@ -1,4 +1,4 @@
-context("Dateset writer")
+context("Datesets")
 
 file <- readr::readr_example("mtcars.csv")
 tmp <- tempfile()
