@@ -17,7 +17,6 @@ Imports:
     magrittr,
     purrr,
     readr,
-    rlang,
     sjmisc,
     skimr,
     stringi,
