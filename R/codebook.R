@@ -76,17 +76,17 @@ codebook <- skimr::skim_with(
   # easier but we want to have the percentiles in proper order for
   # numeric types and that requires a complete rewriting because . And
   # with that, we need to use `append = FALSE` and rebuild all types
-  AsIs        = get_sfl("AsIs"),
+  AsIs        = skimr::get_sfl("AsIs"),
   character   = codebook_sfl_character,
-  complex     = get_sfl("complex"),
-  Date        = get_sfl("Date"),
-  difftime    = get_sfl("difftime"),
-  factor      = get_sfl("factor"),
-  list        = get_sfl("list"),
-  logical     = get_sfl("logical"),
+  complex     = skimr::get_sfl("complex"),
+  Date        = skimr::get_sfl("Date"),
+  difftime    = skimr::get_sfl("difftime"),
+  factor      = skimr::get_sfl("factor"),
+  list        = skimr::get_sfl("list"),
+  logical     = skimr::get_sfl("logical"),
   numeric     = codebook_sfl_numeric,
-  POSIXct     = get_sfl("POSIXct"),
-  Timespan    = get_sfl("Timespan"),
-  ts          = get_sfl("ts"),
+  POSIXct     = skimr::get_sfl("POSIXct"),
+  Timespan    = skimr::get_sfl("Timespan"),
+  ts          = skimr::get_sfl("ts"),
   append      = FALSE
 )
