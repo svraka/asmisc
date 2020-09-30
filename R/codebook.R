@@ -33,6 +33,23 @@ codebook_sfl_character <- skimr::sfl(
   skim_type = "character"
 )
 
+# skimr treats integers and doubles as numerics. We want different
+# skimmers for these types. During the first pass of a CSV parsing
+# integers might be read as doubles but we want to check if they can
+# be stored as integers.
+codebook_sfl_integer <- skimr::sfl(
+  mean      = ~ mean(., na.rm = TRUE),
+  sd        = ~ stats::sd(., na.rm = TRUE),
+  p0        = ~ stats::quantile(., probs = 0,    na.rm = TRUE, names = FALSE),
+  p1        = ~ stats::quantile(., probs = 0.01, na.rm = TRUE, names = FALSE),
+  p25       = ~ stats::quantile(., probs = 0.25, na.rm = TRUE, names = FALSE),
+  p50       = ~ stats::quantile(., probs = 0.50, na.rm = TRUE, names = FALSE),
+  p75       = ~ stats::quantile(., probs = 0.75, na.rm = TRUE, names = FALSE),
+  p99       = ~ stats::quantile(., probs = 0.99, na.rm = TRUE, names = FALSE),
+  p100      = ~ stats::quantile(., probs = 1,    na.rm = TRUE, names = FALSE),
+  skim_type = "integer"
+)
+
 # Numeric skimmers for `codebook()`. Drop histogram and add 1st and
 # 99th percentiles. The entire skim function list has to be recreated
 # because there's no other way of custom ordering (other than manually
@@ -95,6 +112,7 @@ codebook <- function(data, ...) {
     Date      = skimr::get_sfl("Date"),
     difftime  = skimr::get_sfl("difftime"),
     factor    = skimr::get_sfl("factor"),
+    integer   = codebook_sfl_integer,
     list      = skimr::get_sfl("list"),
     logical   = skimr::get_sfl("logical"),
     numeric   = codebook_sfl_numeric,
