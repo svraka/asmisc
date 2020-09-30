@@ -9,11 +9,11 @@ parse_date_ymd(x, orders = "\%y\%m\%d", cutoff_2000 = 30L)
 \arguments{
 \item{x}{a character or numeric vector of dates}
 
-\item{orders}{a character vector of date-time formats. Each order string is
-series of formatting characters as listed \code{\link[base:strptime]{base::strptime()}} but might not
-include the "\%" prefix, for example "ymd" will match all the possible
-dates in year, month, day order.  Formatting orders might include
-arbitrary separators. These are discarded.  See details for implemented
+\item{orders}{a character vector of date-time formats. Each order string is a
+series of formatting characters as listed in \code{\link[base:strptime]{base::strptime()}} but might not
+include the \code{"\%"} prefix. For example, "ymd" will match all the possible
+dates in year, month, day order. Formatting orders might include
+arbitrary separators. These are discarded. See details for implemented
 formats.}
 
 \item{cutoff_2000}{integer. For \code{y} format,  two-digit numbers smaller or equal to
