@@ -4,35 +4,31 @@
 \alias{codebook}
 \title{Create a codebook from a data frame}
 \usage{
-codebook(df)
+codebook(data, ...)
 }
 \arguments{
-\item{df}{A data frame}
+\item{data}{A tibble, or an object that can be coerced into a tibble.}
+
+\item{...}{Columns to select for skimming. When none are provided, the
+default is to skim all columns.}
 }
 \value{
-A tibble from a custom wide format \code{\link[skimr]{skim}} output.  Unlike
-\code{\link[skimr]{skim}}, histograms are not generated but there are
-additional columns:
+A custom \code{\link[skimr]{skim}} output. Unlike
+  \code{\link[skimr]{skim}}, histograms are not generated but there
+  are additional skimmers:
 
-\describe{
-  \item{\code{is_whole}}{Logical, whether a numeric variable has only whole
-    values.}
-  \item{\code{\link[sjmisc:is_num_fac]{is_num_chr}}}{Logical, whether a
-    character column has only numeric values.}
-  \item{\code{chr_values}}{A list column with the first 10 unique character
-    values.}
-  \item{\code{lgl_counts}}{A list column with counts of logical levels.}
-  \item{\code{fct_counts}}{A list column with counts of factor levels.}
-
-}
+  \describe{
+    \item{\code{is_whole} (numeric types)}{Logical, whether a numeric
+      variable has only whole values.}
+    \item{\code{\link[sjmisc:is_num_fac]{is_num_chr}} (numeric types)}{
+      Logical, whether a character column has only numeric values.}
+    \item{\code{chr_values} (character types)}{A list column with the first
+      10 unique character values.}
+  }
 }
 \description{
 Create a codebook of a data frame using \code{\link[skimr]{skim}}.
 }
 \examples{
-codebook(mtcars)
-}
-\seealso{
-\code{\link{codebook_chunked}} for files that are too big to be read
-  into memory at once.
+codebook(dplyr::starwars)
 }

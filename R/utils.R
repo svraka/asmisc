@@ -3,20 +3,6 @@ tlmgr_install_svraka_pkgs <- function() {
   tinytex::tlmgr_install(pkgs)
 }
 
-#' Helper function to list top values of a character vector
-#'
-#' List the first 10 unique values of a character vector.
-#'
-#' @param x A character vector
-#'
-#' @keywords internal
-chr_values <- function(x) {
-  x %>%
-    unique %>% sort %>%
-    stringr::str_subset("[^\\d]") %>%
-    utils::head(n = 10)
-}
-
 #' List data frames and their sizes
 #'
 #' List data frames in global environment and their sizes in megabytes.
