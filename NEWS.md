@@ -1,3 +1,29 @@
+# asmisc 1.0.0
+
+## Breaking changes
+
+Or, rather unbreaking some.
+
+  * Updated `codebook()` to use **skimr** v2 along with a few additional minor changes
+      * Removed `codebook_chunked()`, as it is superseded by `read_delim_chunked_to_dataset()` (see below)
+      * Added skimmers for 1st and 99th percentiles
+      * Removed customizations in factor and logical skimmers
+  * Removed `clean_names`: The **janitor** package has a much better implementation
+  * Removed `df_sizes()`: ESS's `rdired` is a good substitute
+
+## New features
+
+  * Added a few converter functions for data cleaning
+      * `yesno_to_logical()`, `mark_to_logical()` to easily parse vectors with values like `"X"`, or `"Y"` and `"N"` into logicals.
+      * `parse_date_md` to parse year-month and `parse_date_ymd` to parse YY-MM-DD type dates.
+  * Added `read_delim_chunked_to_dataset()` to read a single delimited file in chunks and save them in an Arrow dataset using Hive-style partitioning
+  * Added `tlmgr_install_svraka_pkgs()` to install often used TeX Live packages using **tinytex**.
+
+## Miscellaneous
+
+  * Set up GitHub Actions CI
+  * Added tests for most the new code
+
 # asmisc 0.2.0
 
 First public release.
