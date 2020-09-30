@@ -1,19 +1,23 @@
 #' Helper function to list top values of a character vector
 #'
-#' List the first \code{n} unique values of a character vector.
+#' List the first \code{n} unique values that cannot be coerced into
+#' numeric of a character vector.
 #'
 #' @param x A character vector
 #' @param n How many values should be reported
 #'
 #' @keywords internal
 chr_values <- function(x, n) {
+  # Keep non-numeric values
+  x <- x[is.na(suppressWarnings(as.numeric((x))))]
+
+  # Grab the first n values
   x <- unique(x)
   x <- sort(x)
-  x <- stringr::str_subset(x, "[^\\d]")
   x <- utils::head(x, n = n)
-  x <- paste0(x, collapse = " | ")
 
-  x
+  # skimr does not handle list columns, so we need return a string
+  paste0(x, collapse = " | ")
 }
 
 # Define custom skim function lists. The structure of this R file is a

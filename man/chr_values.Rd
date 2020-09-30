@@ -12,6 +12,7 @@ chr_values(x, n)
 \item{n}{How many values should be reported}
 }
 \description{
-List the first \code{n} unique values of a character vector.
+List the first \code{n} unique values that cannot be coerced into
+numeric of a character vector.
 }
 \keyword{internal}
