@@ -16,8 +16,8 @@ chr_values <- function(x, n) {
   x
 }
 
-# Define custom skim function lists. The structure of this R files is
-# a bit unconventional but first we have to define custom functions,
+# Define custom skim function lists. The structure of this R file is a
+# bit unconventional but first we have to define custom functions,
 # than skim function list because these objects are needed by the main
 # skim function
 
