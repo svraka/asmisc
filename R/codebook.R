@@ -70,23 +70,35 @@ codebook_sfl_numeric <- skimr::sfl(
 #'
 #' @examples
 #' codebook(dplyr::starwars)
-codebook <- skimr::skim_with(
-  # Grab the default skimmers for the types where we're not
-  # customizing anything. Defining a custom skim function is normally
-  # easier but we want to have the percentiles in proper order for
-  # numeric types and that requires a complete rewriting because . And
-  # with that, we need to use `append = FALSE` and rebuild all types
-  AsIs        = skimr::get_sfl("AsIs"),
-  character   = codebook_sfl_character,
-  complex     = skimr::get_sfl("complex"),
-  Date        = skimr::get_sfl("Date"),
-  difftime    = skimr::get_sfl("difftime"),
-  factor      = skimr::get_sfl("factor"),
-  list        = skimr::get_sfl("list"),
-  logical     = skimr::get_sfl("logical"),
-  numeric     = codebook_sfl_numeric,
-  POSIXct     = skimr::get_sfl("POSIXct"),
-  Timespan    = skimr::get_sfl("Timespan"),
-  ts          = skimr::get_sfl("ts"),
-  append      = FALSE
-)
+codebook <- function(data, ...) {
+  # `skimr::skim_with` needs a bit of nudging. It would work by simply
+  # exporting a customized skimming function generated with
+  # `skimr::skim_with()` but then R CMD check would issue warnings
+  # about undeclared imports without any further specifics. Here we
+  # define the skimming function and apply that on our data. This hack
+  # passes R CMD check. Idea came from the **mdsr** package
+  # <https://github.com/beanumber/mdsr>,
+  # <https://cran.r-project.org/package=mdsr>.
+  skim_codebook <- skimr::skim_with(
+    # Grab the default skimmers for the types where we're not
+    # customizing anything. Defining a custom skim function is normally
+    # easier but we want to have the percentiles in proper order for
+    # numeric types and that requires a complete rewriting because . And
+    # with that, we need to use `append = FALSE` and rebuild all types
+    AsIs      = skimr::get_sfl("AsIs"),
+    character = codebook_sfl_character,
+    complex   = skimr::get_sfl("complex"),
+    Date      = skimr::get_sfl("Date"),
+    difftime  = skimr::get_sfl("difftime"),
+    factor    = skimr::get_sfl("factor"),
+    list      = skimr::get_sfl("list"),
+    logical   = skimr::get_sfl("logical"),
+    numeric   = codebook_sfl_numeric,
+    POSIXct   = skimr::get_sfl("POSIXct"),
+    Timespan  = skimr::get_sfl("Timespan"),
+    ts        = skimr::get_sfl("ts"),
+    append    = FALSE
+  )
+
+  skim_codebook(data, ...)
+}
