@@ -29,14 +29,16 @@ find_project_packages <- function(path = ".", not_installed = FALSE) {
   )
 
   list_packages <- function(file) {
-    readLines(file) %>%
-      grep("library|require\\(", ., value = TRUE, perl = TRUE) %>%
-      gsub(".*(library|require)\\((.+?)\\).*", "\\2", ., perl = TRUE) %>%
-      unique %>% sort
+    x <- readLines(file)
+    x <- grep("library|require\\(", x, value = TRUE, perl = TRUE)
+    x <- gsub(".*(library|require)\\((.+?)\\).*", "\\2", x, perl = TRUE)
+    x <- sort(unique(x))
+
+    x
   }
 
-  project_packages <- lapply(files, list_packages) %>%
-    unlist %>% unique %>% sort
+  project_packages <- lapply(files, list_packages)
+  project_packages <- sort(unique(unlist(project_packages)))
 
   if (not_installed == TRUE) {
     installed_packages <- row.names(utils::installed.packages())
