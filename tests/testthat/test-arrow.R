@@ -54,6 +54,19 @@ test_that("`write_single_partition_dataset()` writes only one partition", {
   expect_true(n_files == 1)
 })
 
+test_that("`write_single_partition_dataset()` does not change any data", {
+  df <- readr::read_csv(file)
+  write_single_partition_dataset(df, dataset_path)
+
+  ds <- dplyr::collect(arrow::open_dataset(dataset_path))
+  ds <- dplyr::select(ds, -chunk)
+
+  expect_equal(
+    ds, df,
+    check.attributes = FALSE
+  )
+})
+
 test_that("Parsing warnings are not silenced", {
   df <- readr::read_csv(file)
 
