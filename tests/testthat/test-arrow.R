@@ -22,7 +22,7 @@ test_that("A roundtrip from file to dataset does not change any data", {
   )
 })
 
-test_that("A roundtrip from file to dataset does not change any data", {
+test_that("A roundtrip from file to dataset does not change any data other than modifications done with `processing_function`", {
   test_processing_function <- function(df) {
     dplyr::mutate(df, test_col = "foo")
   }
