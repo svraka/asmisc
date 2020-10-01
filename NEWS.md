@@ -12,6 +12,8 @@ Or, rather unbreaking some.
   * Removed `clean_names`: The **janitor** package has a much better implementation
   * Removed `df_sizes()`: ESS's `rdired` is a good substitute
 
+Per [Semantic Versioning](https://semver.org/) 1.0.0 reflects on these breaking changes and does not refer to any sort of maturity.
+
 ## New features
 
   * Added a few converter functions for data cleaning
