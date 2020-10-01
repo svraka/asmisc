@@ -2,6 +2,7 @@
 % Please edit documentation in R/arrow.R
 \name{read_delim_chunked_to_dataset}
 \alias{read_delim_chunked_to_dataset}
+\alias{write_single_partition_dataset}
 \title{Read a delimited file by chunks and write into Hive-style Parquet files}
 \usage{
 read_delim_chunked_to_dataset(
@@ -13,6 +14,13 @@ read_delim_chunked_to_dataset(
   chunk_col_name = "chunk",
   chunk_file_name = "data.parquet",
   ...
+)
+
+write_single_partition_dataset(
+  df,
+  dataset_base_name,
+  chunk_col_name = "chunk",
+  chunk_file_name = "data.parquet"
 )
 }
 \arguments{
@@ -54,6 +62,8 @@ numbers in the Hive-style partition structure.}
 Hive-style partition structure.}
 
 \item{...}{Passed to \code{\link[readr]{read_delim_chunked}}}
+
+\item{df}{A data frame}
 }
 \value{
 Invisibly return a tibble with parsing problems caught by
@@ -80,6 +90,11 @@ The main goal of this function is to read a single, large,
   delimited file. However, within partition ordering can be changed
   through \code{processing_function}.
 }
+\section{Functions}{
+\itemize{
+\item \code{write_single_partition_dataset}: 
+}}
+
 \seealso{
 \code{vignette(topic = "dataset", package = "arrow")} on
 how to use mult-file Apache Arrow datasets.

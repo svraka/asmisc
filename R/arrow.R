@@ -96,17 +96,11 @@ read_delim_chunked_to_dataset <- function(file,
                                           chunk_col_name = "chunk",
                                           chunk_file_name = "data.parquet",
                                           ...) {
-  # Prepare directory structure. In order to prevent conflicting
-  # chunks, first we clean up everything.
-  if (dir.exists(dataset_base_name)) unlink(dataset_base_name, recursive = TRUE)
-  dir.create(dataset_base_name)
-
   chunk_paths <- get_chunk_paths(dataset_base_name, file_nrow,
                                  chunk_size, chunk_col_name,
                                  chunk_file_name)
 
-  # Partitioning directories need be created recursively
-  purrr::walk(dirname(chunk_paths), dir.create)
+  prepare_dataset_base(dataset_base_name, chunk_paths)
 
   out <- readr::read_delim_chunked(
     file,
@@ -118,6 +112,23 @@ read_delim_chunked_to_dataset <- function(file,
   )
 
   warn_problems(out)
+}
+
+#' @describeIn read_delim_chunked_to_dataset
+#'
+#' @param df A data frame
+#'
+#' @export
+write_single_partition_dataset <- function(df, dataset_base_name,
+                                           chunk_col_name = "chunk",
+                                           chunk_file_name = "data.parquet") {
+  chunk_paths <- get_chunk_paths(dataset_base_name, nrow(df),
+                                 nrow(df), chunk_col_name,
+                                 chunk_file_name)
+
+  prepare_dataset_base(dataset_base_name, chunk_paths)
+
+  arrow::write_parquet(df, chunk_paths)
 }
 
 #' Create Hive-style partition paths
@@ -142,6 +153,22 @@ get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
   hive_name <- paste0(chunk_col_name, "=", chunk_numbers)
 
   file.path(dataset_base_name, hive_name, chunk_file_name)
+}
+
+#' Prepare directory structure for an Arrow dataset
+#'
+#' To be used with \code{\link{read_delim_chunked_to_dataset}}.
+#'
+#' @inheritParams read_delim_chunked_to_dataset
+#' @keywords internal
+prepare_dataset_base <- function(dataset_base_name, chunk_paths) {
+  # In order to prevent conflicting chunks, first we clean up
+  # everything.
+  if (dir.exists(dataset_base_name)) unlink(dataset_base_name, recursive = TRUE)
+  dir.create(dataset_base_name)
+
+  # Partitioning directories need be created recursively.
+  purrr::walk(dirname(chunk_paths), dir.create)
 }
 
 #' Callback function to write Parquet partition

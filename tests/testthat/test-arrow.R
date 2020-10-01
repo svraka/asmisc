@@ -44,6 +44,16 @@ test_that("A roundtrip from file to dataset does not change any data", {
   )
 })
 
+test_that("`write_single_partition_dataset()` writes only one partition", {
+  df <- readr::read_csv(file)
+  write_single_partition_dataset(df, dataset_path)
+
+  ds <- arrow::open_dataset(dataset_path)
+  n_files <- length(ds$files)
+
+  expect_true(n_files == 1)
+})
+
 test_that("Parsing warnings are not silenced", {
   df <- readr::read_csv(file)
 
