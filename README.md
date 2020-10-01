@@ -5,12 +5,13 @@
 [![CRAN](http://www.r-pkg.org/badges/version/asmisc)](https://cran.r-project.org/package=asmisc)
 <!-- badges: end -->
 
-A small collection if utility functions, mostly for personal use.
+A small collection of utility functions, mostly for personal use.
 
 ## Installation
 
-You can install  asmisc from [GitHub](https://github.com/svraka/asmisc) with:
+You can install asmisc from [GitHub](https://github.com/svraka/asmisc) with:
 
 ``` r
+# install.packages("remotes")
 remotes::install_github("svraka/asmisc")
 ```
