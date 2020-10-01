@@ -1,7 +1,7 @@
 context("Codebook")
 
-test_that("we cover all default skimmers", {
-  defaults <- names(skimr::get_default_skimmer_names())
+test_that("all default skimmers are covered", {
+  default_skimmers <- names(skimr::get_default_skimmer_names())
   # This list is manually copied from `codebook()`. See comments why
   # the custom sfl cannot be defined. `integer` is left out, as skimr
   # treats them as numerics.
@@ -10,5 +10,5 @@ test_that("we cover all default skimmers", {
                          "logical", "numeric", "POSIXct", "Timespan",
                          "ts")
 
-  expect_identical(defaults, codebook_skimmers)
+  expect_identical(default_skimmers, codebook_skimmers)
 })
