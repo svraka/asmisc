@@ -7,6 +7,7 @@ Or, rather unbreaking some.
   * Updated `codebook()` to use **skimr** v2 along with a few additional minor changes
       * Removed `codebook_chunked()`, as it is superseded by `read_delim_chunked_to_dataset()` (see below)
       * Added skimmers for 1st and 99th percentiles
+      * Added skimmers for deciding if a column should be integer, or double
       * Removed customizations in factor and logical skimmers
   * Removed `clean_names`: The **janitor** package has a much better implementation
   * Removed `df_sizes()`: ESS's `rdired` is a good substitute
