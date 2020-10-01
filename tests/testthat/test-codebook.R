@@ -11,3 +11,20 @@ test_that("all default skimmers are covered", {
 
   expect_identical(default_skimmers, codebook_skimmers)
 })
+
+test_that("`chr_values()` handles NA values", {
+  expect_identical(
+    chr_values(c("1", "2", NA)),
+    NA_character_
+  )
+
+  expect_identical(
+    chr_values(c(NA, NA, NA)),
+    NA_character_
+  )
+
+  expect_identical(
+    chr_values(c("a", "b", NA)),
+    "a | b"
+  )
+})

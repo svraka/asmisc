@@ -17,7 +17,11 @@ chr_values <- function(x, n = 5) {
   x <- utils::head(x, n = n)
 
   # skimr does not handle list columns, so we need return a string
-  paste0(x, collapse = " | ")
+  x <- paste0(x, collapse = " | ")
+
+  if (x == "") x <- as.character(NA)
+
+  x
 }
 
 #' Check whether a vector has only whole values
