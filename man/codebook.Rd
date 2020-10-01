@@ -27,7 +27,10 @@ A custom \code{\link[skimr]{skim}} output. Unlike
   }
 }
 \description{
-Create a codebook of a data frame using \code{\link[skimr]{skim}}.
+Create a codebook of a data frame using \code{\link[skimr]{skim}}
+that can help fine-tuning \code{col_types} and help with simple
+data cleaning tasks when processing a delimited file using
+\pkg{readr}.
 }
 \examples{
 codebook(dplyr::starwars)

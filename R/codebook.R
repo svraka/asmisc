@@ -29,6 +29,13 @@ chr_values <- function(x, n = 5) {
 #' @param x A numeric vector
 #'
 #' @return A single logical
+#'
+#' @details Take the results from this function with caution, as
+#'   floating point precision can affect rounding. This function is
+#'   intended to be used for deciding what \code{col_type} to choose
+#'   for a column in a delimited file when processing it with
+#'   \pkg{readr} functions. If the original data is not an integer,
+#'   \pkg{readr} will issue parsing errors.
 is_whole <- function(x) {
   all(floor(x) == x, na.rm = TRUE)
 }
@@ -95,7 +102,10 @@ codebook_sfl_numeric <- skimr::sfl(
 
 #' Create a codebook from a data frame
 #'
-#' Create a codebook of a data frame using \code{\link[skimr]{skim}}.
+#' Create a codebook of a data frame using \code{\link[skimr]{skim}}
+#' that can help fine-tuning \code{col_types} and help with simple
+#' data cleaning tasks when processing a delimited file using
+#' \pkg{readr}.
 #'
 #' @inheritParams skimr::skim
 #'

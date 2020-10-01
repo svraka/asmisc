@@ -28,3 +28,13 @@ test_that("`chr_values()` handles NA values", {
     "a | b"
   )
 })
+
+test_that("`is_whole()` reports expected results", {
+  expect_true(is_whole(c(1, 2, 3)))
+  expect_true(is_whole(c(1, 2, NA)))
+  expect_true(is_whole(c(2^32, 2^33, 2^34)))
+  expect_true(is_whole(c(NA, NA, NA)))
+  expect_false(is_whole(c(1, 2, 3.5)))
+  # We can run into problems with floating point precision
+  expect_true(is_whole(c(2^10) + 10 * .Machine$double.neg.eps))
+})
