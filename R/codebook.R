@@ -6,7 +6,7 @@
 #' @param x A character vector
 #' @param n How many values should be reported
 #'
-#' @keywords internal
+#' @export
 chr_values <- function(x, n = 5) {
   # Keep non-numeric values
   x <- x[is.na(suppressWarnings(as.numeric((x))))]
@@ -40,11 +40,14 @@ chr_values <- function(x, n = 5) {
 #' @describeIn is_whole Check if vector only has whole values. Return
 #'   \code{TRUE} for whole values larger than the largest integer
 #'   which can be represented.
+#'
+#' @export
 is_whole <- function(x) {
   all(floor(x) == x, na.rm = TRUE)
 }
 
 #' @describeIn is_whole Check if a vector can be coerced to integer.
+#' @export
 maybe_int <- function(x) {
   x <- stats::na.omit(x)
 

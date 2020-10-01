@@ -15,4 +15,3 @@ chr_values(x, n = 5)
 List the first \code{n} unique values that cannot be coerced into
 numeric of a character vector.
 }
-\keyword{internal}
