@@ -20,6 +20,7 @@ Per [Semantic Versioning](https://semver.org/) 1.0.0 reflects on these breaking 
       * `yesno_to_logical()`, `mark_to_logical()` to easily parse vectors with values like `"X"`, or `"Y"` and `"N"` into logicals.
       * `parse_date_md` to parse year-month and `parse_date_ymd` to parse YY-MM-DD type dates.
   * Added `read_delim_chunked_to_dataset()` to read a single delimited file in chunks and save them in an Arrow dataset using Hive-style partitioning
+  * Added `pretty_print_date()` to format dates in several languages.
   * Added `tlmgr_install_svraka_pkgs()` to install often used TeX Live packages using **tinytex**.
 
 ## Miscellaneous
