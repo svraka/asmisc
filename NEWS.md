@@ -7,7 +7,7 @@ Or, rather unbreaking some.
   * Updated `codebook()` to use **skimr** v2 along with a few additional minor changes
       * Removed `codebook_chunked()`, as it is superseded by `read_delim_chunked_to_dataset()` (see below)
       * Added skimmers for 1st and 99th percentiles
-      * Added skimmers for deciding if a column should be integer, or double
+      * Added skimmers for deciding if a column should be integer, or double (`is_whole()`, `maybe_int()`)
       * Removed customizations in factor and logical skimmers
   * Removed `clean_names`: The **janitor** package has a much better implementation
   * Removed `df_sizes()`: ESS's `rdired` is a good substitute
@@ -19,7 +19,8 @@ Per [Semantic Versioning](https://semver.org/) 1.0.0 reflects on these breaking 
   * Added a few converter functions for data cleaning
       * `yesno_to_logical()`, `mark_to_logical()` to easily parse vectors with values like `"X"`, or `"Y"` and `"N"` into logicals.
       * `parse_date_md` to parse year-month and `parse_date_ymd` to parse YY-MM-DD type dates.
-  * Added `read_delim_chunked_to_dataset()` to read a single delimited file in chunks and save them in an Arrow dataset using Hive-style partitioning
+  * Added `read_delim_chunked_to_dataset()` to read a single delimited file in chunks and save them in an Arrow dataset using Hive-style partitioning.
+  * Added `write_single_partition_dataset()` to write a data frame into an Arrow dataset. Even if a delimited file fits in RAM, it could be convenient to have several different data sources in Arrow datasets so that only `arrow::open_dataset()` has to be used for reading in data.
   * Added `pretty_print_date()` to format dates in several languages.
   * Added `tlmgr_install_svraka_pkgs()` to install often used TeX Live packages using **tinytex**.
 
