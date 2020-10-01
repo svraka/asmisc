@@ -38,3 +38,10 @@ test_that("`is_whole()` reports expected results", {
   # We can run into problems with floating point precision
   expect_true(is_whole(c(2^10) + 10 * .Machine$double.neg.eps))
 })
+
+test_that("maybe_int()` reports expected results", {
+  expect_true(maybe_int(c(1, 2, 3)))
+  expect_true(maybe_int(c(1, 2, NA)))
+  expect_true(maybe_int(c(NA, NA, NA)))
+  expect_false(maybe_int(c(1, 2, 2^32)))
+})
