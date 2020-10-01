@@ -20,6 +20,26 @@ chr_values <- function(x, n) {
   paste0(x, collapse = " | ")
 }
 
+#' Check whether a vector has only whole values
+#'
+#' @param x A numeric vector
+#'
+#' @return A single logical
+is_whole <- function(x) {
+  all(floor(x) == x, na.rm = TRUE)
+}
+
+#' Check whether a vector can be coerced to integer
+#'
+#' @param x A numeric vector
+#'
+#' @return A single logical value
+maybe_int <- function(x) {
+  x <- stats::na.omit(x)
+
+  all(is_whole(x)) && all(!is.na(suppressWarnings(as.integer(x))))
+}
+
 # Define custom skim function lists. The structure of this R file is a
 # bit unconventional but first we have to define custom functions,
 # than skim function list because these objects are needed by the main
@@ -64,7 +84,8 @@ codebook_sfl_numeric <- skimr::sfl(
   p75       = ~ stats::quantile(., probs = 0.75, na.rm = TRUE, names = FALSE),
   p99       = ~ stats::quantile(., probs = 0.99, na.rm = TRUE, names = FALSE),
   p100      = ~ stats::quantile(., probs = 1,    na.rm = TRUE, names = FALSE),
-  is_whole  = ~ all(floor(.) == ., na.rm = TRUE),
+  is_whole  = is_whole,
+  maybe_int = maybe_int,
   skim_type = "numeric"
 )
 
