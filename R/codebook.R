@@ -24,27 +24,27 @@ chr_values <- function(x, n = 5) {
   x
 }
 
-#' Check whether a vector has only whole values
+#' Check if a vector might be coercible to integer
 #'
-#' @param x A numeric vector
+#' @param x A numeric vector.
 #'
-#' @return A single logical
+#' @return A single logical.
 #'
-#' @details Take the results from this function with caution, as
-#'   floating point precision can affect rounding. This function is
-#'   intended to be used for deciding what \code{col_type} to choose
-#'   for a column in a delimited file when processing it with
-#'   \pkg{readr} functions. If the original data is not an integer,
-#'   \pkg{readr} will issue parsing errors.
+#' @details Take the results from these function with caution, as
+#'   floating point precision can affect rounding. They are intended
+#'   to be used for deciding what \code{col_type} to choose for a
+#'   column in a delimited file when processing it with \pkg{readr}
+#'   functions. If the original data is not an integer, \pkg{readr}
+#'   will issue parsing errors.
+#'
+#' @describeIn is_whole Check if vector only has whole values. Return
+#'   \code{TRUE} for whole values larger than the largest integer
+#'   which can be represented.
 is_whole <- function(x) {
   all(floor(x) == x, na.rm = TRUE)
 }
 
-#' Check whether a vector can be coerced to integer
-#'
-#' @param x A numeric vector
-#'
-#' @return A single logical value
+#' @describeIn is_whole Check if a vector can be coerced to integer.
 maybe_int <- function(x) {
   x <- stats::na.omit(x)
 
