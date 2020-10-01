@@ -7,7 +7,7 @@
 #' @param n How many values should be reported
 #'
 #' @keywords internal
-chr_values <- function(x, n) {
+chr_values <- function(x, n = 5) {
   # Keep non-numeric values
   x <- x[is.na(suppressWarnings(as.numeric((x))))]
 
@@ -49,8 +49,8 @@ maybe_int <- function(x) {
 # added at the end so we don't have to rebuild all skimmers.
 codebook_sfl_character <- skimr::sfl(
   is_num_chr = sjmisc::is_num_chr,
-  chr_values = ~ chr_values(., n = 10),
-  skim_type = "character"
+  chr_values = chr_values,
+  skim_type  = "character"
 )
 
 # skimr treats integers and doubles as numerics. We want different

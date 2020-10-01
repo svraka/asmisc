@@ -4,7 +4,7 @@
 \alias{chr_values}
 \title{Helper function to list top values of a character vector}
 \usage{
-chr_values(x, n)
+chr_values(x, n = 5)
 }
 \arguments{
 \item{x}{A character vector}
