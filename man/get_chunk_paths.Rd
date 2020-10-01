@@ -16,12 +16,17 @@ get_chunk_paths(
 \item{dataset_base_name}{Path of the directory to write the Hive
 partitioned Parquet files to.}
 
-\item{file_nrow}{Number of rows in \code{file}. As there is no
+\item{file_nrow}{Number of data rows in \code{file}. As there is no
 reliable and cross-platform way to get the exact number of lines
 in a compressed file, this has to be set manually to calculate
 the number of chunks and the names of partitions. Use \code{wc}
 on a Unix-like system to determine row count (\code{zcat file.gz
-| wc -l}, or similar).}
+| wc -l}, or similar). Only count rows considered as data,
+otherwise the dataset's partitioning scheme will have empty
+directories. This does not result in errors but it is undesirable
+for human-readability. Subtract from the row count any header
+row(s), or the number of lines skipped with the \code{skip}
+(again, \code{zcat file.gz | head}, or similar can be useful).}
 
 \item{chunk_size}{The number of rows to include in each chunk}
 
