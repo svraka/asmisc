@@ -84,3 +84,25 @@ test_that("`mark_to_logical()` handles NA correctly", {
     c(FALSE)
   )
 })
+
+test_that("`parse_date_ymd()` is vectorised", {
+  expect_identical(
+    parse_date_ymd(c("010101", "210101")),
+    as.Date(c("2001-01-01", "2021-01-01")))
+})
+
+test_that("`parse_date_ymd()` handles centuries correctly", {
+  expect_identical(
+    parse_date_ymd(c("300101", "310101")),
+    as.Date(c("2030-01-01", "1931-01-01"))
+  )
+
+  expect_identical(
+    parse_date_ymd(c("400101", "410101"), cutoff_2000 = 40),
+    as.Date(c("2040-01-01", "1941-01-01"))
+  )
+})
+
+test_that("`parse_date_ymd()` returns parse warnings", {
+  expect_warning(parse_date_ymd("210431"))
+})

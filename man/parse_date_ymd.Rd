@@ -9,27 +9,30 @@ parse_date_ymd(x, orders = "\%y\%m\%d", cutoff_2000 = 30L)
 \arguments{
 \item{x}{a character or numeric vector of dates}
 
-\item{orders}{a character vector of date-time formats. Each order string is a
-series of formatting characters as listed in \code{\link[base:strptime]{base::strptime()}} but might not
-include the \code{"\%"} prefix. For example, "ymd" will match all the possible
-dates in year, month, day order. Formatting orders might include
-arbitrary separators. These are discarded. See details for implemented
-formats.}
+\item{orders}{a character vector of date-time formats. Each order string is
+a series of formatting characters as listed in \code{\link[base:strptime]{base::strptime()}} but
+might not include the \code{"\%"} prefix. For example, "ymd" will match all the
+possible dates in year, month, day order. Formatting orders might include
+arbitrary separators. These are discarded. See details for the implemented
+formats. If multiple order strings are supplied, they are applied in turn
+for \code{parse_date_time2()} and \code{fast_strptime()}. For \code{parse_date_time()}
+the order of applied formats is determined by \code{select_formats} parameter.}
 
-\item{cutoff_2000}{integer. For \code{y} format,  two-digit numbers smaller or equal to
-\code{cutoff_2000} are parsed as 20th's century, 19th's otherwise. Available only
-for functions relying on \code{lubridate}s internal parser.}
+\item{cutoff_2000}{integer. For \code{y} format,  two-digit numbers smaller or equal
+to \code{cutoff_2000} are parsed as though starting with \code{20}, otherwise parsed
+as though starting with \code{19}. Available only for functions relying on
+\code{lubridate}s internal parser.}
 }
 \value{
-A character vector of class \code{\link[base]{Date}}
+A vector of class \code{\link[base]{Date}}
 }
 \description{
 Helper function to convert dates stored as strings containing six
-digits using \code{\link[lubridate]{parse_date_time2}}.
+digits using \code{\link[lubridate]{parse_date_time}}.
 }
 \details{
 \code{cutoff_2000} defaults to 30 which is a convenient
   value for my work. Unlike
-  \code{\link[lubridate]{parse_date_time2}}, this function returns
+  \code{\link[lubridate]{parse_date_time}}, this function returns
   a date.
 }

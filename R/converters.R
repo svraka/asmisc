@@ -111,24 +111,25 @@ parse_date_md <- function(x,
 #' Parse date string without century
 #'
 #' Helper function to convert dates stored as strings containing six
-#' digits using \code{\link[lubridate]{parse_date_time2}}.
+#' digits using \code{\link[lubridate]{parse_date_time}}.
 #'
 #' @inheritParams lubridate::parse_date_time2
-#' @return A character vector of class \code{\link[base]{Date}}
+#' @return A vector of class \code{\link[base]{Date}}
 #' @details \code{cutoff_2000} defaults to 30 which is a convenient
 #'   value for my work. Unlike
-#'   \code{\link[lubridate]{parse_date_time2}}, this function returns
+#'   \code{\link[lubridate]{parse_date_time}}, this function returns
 #'   a date.
 #' @export
 parse_date_ymd <- function(x, orders = "%y%m%d", cutoff_2000 = 30L) {
-  x <- lubridate::parse_date_time2(
-    x,
-    orders = orders,
-    cutoff_2000 = cutoff_2000
-  )
+  # Construct date string with century
+  century_19 <- as.integer(stringr::str_sub(x, 1, 2))
+  century_19 <- (century_19 > cutoff_2000)
+  year_prefix <- rep("20", times = length(x))
+  year_prefix[century_19] <- "19"
+  x <- paste0(year_prefix, x)
 
-  # lubridate::parse_date_time2 returns POSIXct
-  x <- as.Date(x)
+  # lubridate::parse_date_time returns POSIXct
+  x <- as.Date(lubridate::parse_date_time(x, orders = orders))
 
   x
 }
