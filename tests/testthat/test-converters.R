@@ -106,3 +106,10 @@ test_that("`parse_date_ymd()` handles centuries correctly", {
 test_that("`parse_date_ymd()` returns parse warnings", {
   expect_warning(parse_date_ymd("210431"))
 })
+
+test_that("`parse_date_ymd()` handles NAs", {
+  expect_identical(
+    parse_date_ymd(NA_character_),
+    as.Date(NA)
+  )
+})
