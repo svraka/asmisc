@@ -71,9 +71,15 @@ Hive-style partition structure.}
 \item{df}{A data frame}
 }
 \value{
-Invisibly return a tibble with parsing problems caught by
-  \pkg{readr} (see \code{\link[readr]{problems}}). \code{NULL} if
-  no parsing problems occurred.
+A named list with the following elements.
+
+\describe{
+  \item{\code{spec}}{The column specification used by
+    \pkg{readr} (either after guessing, or the one supplied with
+    the \code{col_types} argument).}
+  \item{\code{problems}}{If \pkg{readr} encountered any parsing failures, a
+    tibble returned by \code{\link[readr]{problems}}}.
+}
 }
 \description{
 Read a single delimited file in chunks using

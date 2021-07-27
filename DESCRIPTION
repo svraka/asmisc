@@ -1,3 +1,4 @@
+FIXME: require first release that fixes <https://github.com/tidyverse/readr/issues/1248> and remove Github dependency
 Package: asmisc
 Type: Package
 Title: Miscellaneous Utility Functions
@@ -15,7 +16,7 @@ Imports:
     dplyr,
     lubridate,
     purrr,
-    readr,
+    readr (>= 2.0.0.9000),
     sjmisc,
     skimr,
     stringr,
@@ -25,3 +26,5 @@ RoxygenNote: 7.1.1
 Suggests:
     testthat (>= 2.1.0),
     tinytex
+Remotes:
+    github::tidyverse/readr

@@ -86,9 +86,15 @@ metadata_parquet <- function(file) {
 #'   delimited file. However, within partition ordering can be changed
 #'   through \code{processing_function}.
 #'
-#' @return Invisibly return a tibble with parsing problems caught by
-#'   \pkg{readr} (see \code{\link[readr]{problems}}). \code{NULL} if
-#'   no parsing problems occurred.
+#' @return A named list with the following elements.
+#'
+#' \describe{
+#'   \item{\code{spec}}{The column specification used by
+#'     \pkg{readr} (either after guessing, or the one supplied with
+#'     the \code{col_types} argument).}
+#'   \item{\code{problems}}{If \pkg{readr} encountered any parsing failures, a
+#'     tibble returned by \code{\link[readr]{problems}}}.
+#' }
 #'
 #' @seealso \code{vignette(topic = "dataset", package = "arrow")} on
 #' how to use mult-file Apache Arrow datasets.
@@ -109,14 +115,18 @@ read_delim_chunked_to_dataset <- function(file,
 
   out <- readr::read_delim_chunked(
     file,
-    callback = readr::DataFrameCallback$new(
+    callback = readr::ListCallback$new(
       callback_write_parquet(chunk_paths, chunk_size, processing_function)
     ),
     chunk_size = chunk_size,
     ...
   )
 
-  warn_problems(out)
+  res <- list()
+  problems <- warn_problems(out[[1]]$problems)
+  if (!is.null(problems)) res$problems <- problems
+  res$spec <- out[[1]]$spec
+  invisible(res)
 }
 
 #' @describeIn read_delim_chunked_to_dataset
@@ -194,6 +204,7 @@ callback_write_parquet <- function(chunk_paths, chunk_size,
     chunk_number <- (pos %/% chunk_size) + 1
 
     problems <- readr::problems(x)
+    spec <- readr::spec(x)
 
     if (!is.null(processing_function)) {
       x <- processing_function(x)
@@ -201,7 +212,7 @@ callback_write_parquet <- function(chunk_paths, chunk_size,
 
     arrow::write_parquet(x, sink = chunk_paths[chunk_number])
 
-    return(problems)
+    return(list(problems = problems, spec = spec))
   }
 }
 
@@ -224,8 +235,8 @@ warn_problems <- function(x) {
       call. = FALSE, immediate. = TRUE, noBreaks. = TRUE
     )
 
-    invisible(x)
+    x
   } else {
-    invisible(NULL)
+    NULL
   }
 }

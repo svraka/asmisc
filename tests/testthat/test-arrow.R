@@ -67,7 +67,7 @@ test_that("`write_single_partition_dataset()` does not change any data", {
   )
 })
 
-test_that("Parsing warnings are not silenced", {
+test_that("Parsing warnings are not silenced and `problems` data frame is returned", {
   df <- readr::read_csv(file)
 
   expect_warning(
@@ -79,7 +79,43 @@ test_that("Parsing warnings are not silenced", {
     regexp = "\\d+ parsing failures."
   )
 
-  expect_true(is.data.frame(res) && nrow(res) > 0)
+  expect_true(is.data.frame(res$problems) && nrow(res$problems) > 0)
+})
+
+test_that("`problems` data frame is not returned if there were no parsing problems", {
+  # We'll get a message with the specs but we don't need to deal with that here,
+  # as messages don't generate test failures
+
+  df <- readr::read_csv(file)
+
+  expect_true(is.null(res$problems))
+})
+
+test_that("Column specs are returned and printed if not supplied with `col_types`", {
+  df <- readr::read_csv(file)
+
+  expect_message(
+    res <- read_delim_chunked_to_dataset(file, dataset_path,
+                                         file_nrow = nrow(df),
+                                         chunk_size = 5, delim = ","),
+    regexp = "Column specification"
+  )
+
+  expect_true(inherits(res$spec, "col_spec"))
+})
+
+test_that("Column specs are returned and not printed when supplied with `col_types`", {
+  df <- readr::read_csv(file)
+
+  expect_silent(
+    res <- read_delim_chunked_to_dataset(file, dataset_path,
+                                         file_nrow = nrow(df),
+                                         chunk_size = 5, delim = ",",
+                                         col_types = paste0(rep("c", 11),
+                                                            collapse = ""))
+    )
+
+  expect_true(inherits(res$spec, "col_spec"))
 })
 
 test_that("Determining chunk paths is correct", {
