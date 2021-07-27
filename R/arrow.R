@@ -83,11 +83,15 @@ metadata_parquet <- function(file) {
 #' within partition ordering can be changed through
 #' `processing_function`.
 #'
-#' @return
+#' @return A named list with the following elements.
 #'
-#' Invisibly return a tibble with parsing problems caught by
-#' \pkg{readr} (see [readr::problems()]). `NULL` if no parsing
-#' problems occurred.
+#' \describe{
+#'   \item{`spec`}{The column specification used by \pkg{readr}
+#'     (either after guessing, or the one supplied with the
+#'     `col_types` argument).}
+#'   \item{`problems`}{If \pkg{readr} encountered any parsing
+#'     failures, a tibble returned by [readr::problems()]}.
+#' }
 #'
 #' @seealso
 #'
@@ -112,14 +116,30 @@ read_delim_chunked_to_dataset <- function(file,
 
   out <- readr::read_delim_chunked(
     file,
-    callback = readr::DataFrameCallback$new(
+    callback = readr::ListCallback$new(
       callback_write_parquet(chunk_paths, chunk_size, processing_function)
     ),
     chunk_size = chunk_size,
     ...
   )
 
-  warn_problems(out)
+  res <- list()
+
+  # Parsing problems are collected for all chunks. Bind them and
+  # report once.
+  problems <- do.call("rbind", args = lapply(out, \(x) x[["problems"]]))
+  if (nrow(problems) != 0) {
+    warn_problems(problems)
+    res$problems <- problems
+  }
+
+  # Chunked readers guess column specs on the first chunk and then
+  # reuse that for the rest of the chunks. Thus returning the first
+  # suffices, and if that doesn't work on the next chunks, we'll get
+  # parsing problems anyway.
+  res$spec <- out[[1]][["spec"]]
+
+  invisible(res)
 }
 
 #' @describeIn read_delim_chunked_to_dataset
@@ -200,6 +220,7 @@ callback_write_parquet <- function(chunk_paths, chunk_size,
     chunk_number <- (pos %/% chunk_size) + 1
 
     problems <- readr::problems(x)
+    spec <- readr::spec(x)
 
     if (!is.null(processing_function)) {
       x <- processing_function(x)
@@ -207,7 +228,7 @@ callback_write_parquet <- function(chunk_paths, chunk_size,
 
     arrow::write_parquet(x, sink = chunk_paths[chunk_number])
 
-    return(problems)
+    return(list(problems = problems, spec = spec))
   }
 }
 
@@ -223,15 +244,9 @@ callback_write_parquet <- function(chunk_paths, chunk_size,
 warn_problems <- function(x) {
   n_problems <- nrow(x)
 
-  if (n_problems != 0) {
-    warning(
-      n_problems, " parsing failure", if (n_problems > 1) "s", ".\n",
-      paste(format(x), collapse = "\n"),
-      call. = FALSE, immediate. = TRUE, noBreaks. = TRUE
-    )
-
-    invisible(x)
-  } else {
-    invisible(NULL)
-  }
+  warning(
+    n_problems, " parsing failure", if (n_problems > 1) "s", ".\n",
+    paste(format(x), collapse = "\n"),
+    call. = FALSE, immediate. = TRUE, noBreaks. = TRUE
+  )
 }
