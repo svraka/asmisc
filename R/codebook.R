@@ -120,12 +120,15 @@ get_skimmers.numeric_asmisc <- function(column) {
 #'   are additional skimmers:
 #'
 #'   \describe{
-#'     \item{\code{is_whole} (numeric types)}{Logical, whether a numeric
-#'       variable has only whole values.}
-#'     \item{\code{\link[sjmisc:is_num_fac]{is_num_chr}} (numeric types)}{
-#'       Logical, whether a character column has only numeric values.}
-#'     \item{\code{chr_values} (character types)}{A list column with the first
-#'       10 unique character values.}
+#'     \item{\code{integer}}{By default, \pkg{skimr} handles integers
+#'       and doubles identically. We separate the two. For integers
+#'       we add more quantiles to the default statistics.}
+#'     \item{\code{numeric}}{For doubles. In addition to statistics
+#'       in \code{integer}, we also check wether the column could be
+#'       converted to integer.}
+#'     \item{\code{character}}{Extend default statistics with a check
+#'       whether the column could be converted to numeric and list the
+#'       first couple of unique values.}
 #'   }
 #'
 #' @export
