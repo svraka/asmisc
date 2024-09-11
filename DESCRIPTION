@@ -12,7 +12,6 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     arrow,
-    dplyr,
     lubridate,
     purrr,
     readr,
@@ -21,4 +20,5 @@ Imports:
     utils
 RoxygenNote: 7.3.2
 Suggests:
+    dplyr,
     testthat (>= 2.1.0)
