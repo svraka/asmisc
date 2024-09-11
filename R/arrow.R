@@ -173,7 +173,9 @@ prepare_dataset_base <- function(dataset_base_name, chunk_paths) {
   dir.create(dataset_base_name)
 
   # Partitioning directories need be created recursively.
-  purrr::walk(dirname(chunk_paths), dir.create)
+  x <- dirname(chunk_paths)
+  lapply(x, dir.create)
+  invisible(x)
 }
 
 #' Callback function to write Parquet partition

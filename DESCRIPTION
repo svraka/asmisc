@@ -13,7 +13,6 @@ LazyData: true
 Imports:
     arrow,
     lubridate,
-    purrr,
     readr,
     skimr,
     tibble,
