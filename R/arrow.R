@@ -152,8 +152,8 @@ get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
   # Pad partition numbers with zeros to keep the dataset's ordering
   # after reading with back `open_dataset()`
   max_nchar <- nchar(as.character(max(chunk_numbers)))
-  chunk_numbers <- stringr::str_pad(chunk_numbers, width = max_nchar,
-                                    side = "left", pad = "0")
+  fmt <- sprintf("%%0.%si", max_nchar)
+  chunk_numbers <- sprintf(fmt, chunk_numbers)
 
   hive_name <- paste0(chunk_col_name, "=", chunk_numbers)
 

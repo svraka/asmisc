@@ -18,7 +18,6 @@ Imports:
     readr,
     sjmisc,
     skimr,
-    stringr,
     tibble,
     utils
 RoxygenNote: 7.3.2
