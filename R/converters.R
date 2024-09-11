@@ -23,7 +23,8 @@ yesno_to_logical <- function(x,
   # suffices.
   x_values <- sort(unique(x))
 
-  if (sjmisc::is_empty(x_values) == FALSE) {
+  # If `x` is all NA we can't do other checks.
+  if (length(x_values) > 0) {
     if (length(x_values) > 2){
       stop("`x` contains more than two distinct non-NA values.")
     }
@@ -63,7 +64,8 @@ mark_to_logical <- function(x,
   x_values <- sort(unique(x))
   morevalues_error <- "`x` contains non-NA values other than `mark`."
 
-  if (sjmisc::is_empty(x_values) == FALSE) {
+  # If `x` is all NA we can't do other checks.
+  if (length(x_values) > 0) {
     if (length(x_values) != 1) {
       stop(morevalues_error)
     }

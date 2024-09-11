@@ -16,7 +16,6 @@ Imports:
     lubridate,
     purrr,
     readr,
-    sjmisc,
     skimr,
     tibble,
     utils
