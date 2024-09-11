@@ -28,10 +28,10 @@ Take the results from these function with caution, as
 }
 \section{Functions}{
 \itemize{
-\item \code{is_whole}: Check if vector only has whole values. Return
+\item \code{is_whole()}: Check if vector only has whole values. Return
 \code{TRUE} for whole values larger than the largest integer
 which can be represented.
 
-\item \code{maybe_int}: Check if a vector can be coerced to integer.
-}}
+\item \code{maybe_int()}: Check if a vector can be coerced to integer.
 
+}}

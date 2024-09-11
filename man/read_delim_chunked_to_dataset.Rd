@@ -33,9 +33,10 @@ be automatically uncompressed. Files starting with \verb{http://},
 downloaded. Remote gz files can also be automatically downloaded and
 decompressed.
 
-Literal data is most useful for examples and tests. It must contain at
-least one new line to be recognised as data (instead of a path) or be a
-vector of greater than length 1.
+Literal data is most useful for examples and tests. To be recognised as
+literal data, the input must be either wrapped with \code{I()}, be a string
+containing at least one new line, or be a vector containing at least one
+string with a new line.
 
 Using a value of \code{\link[readr:clipboard]{clipboard()}} will read from the system clipboard.}
 
@@ -97,9 +98,9 @@ The main goal of this function is to read a single, large,
 }
 \section{Functions}{
 \itemize{
-\item \code{write_single_partition_dataset}: 
-}}
+\item \code{write_single_partition_dataset()}: 
 
+}}
 \seealso{
 \code{vignette(topic = "dataset", package = "arrow")} on
 how to use mult-file Apache Arrow datasets.
