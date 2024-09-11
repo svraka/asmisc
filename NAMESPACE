@@ -2,7 +2,6 @@
 
 export(chr_values)
 export(codebook)
-export(find_project_packages)
 export(is_whole)
 export(mark_to_logical)
 export(maybe_int)
