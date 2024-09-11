@@ -1,16 +1,28 @@
 context("Codebook")
 
-test_that("all default skimmers are covered", {
-  default_skimmers <- sort(names(skimr::get_default_skimmer_names()))
-  # This list is manually copied from `codebook()`. See comments why
-  # the custom sfl cannot be defined. `integer` is left out, as skimr
-  # treats them as numerics.
-  codebook_skimmers <- sort(c("AsIs", "character", "complex", "Date",
-                              "difftime", "factor", "haven_labelled",
-                              "list", "logical", "numeric", "POSIXct",
-                              "Timespan", "ts"))
+test_that("Skimmers for `codebook()` are registered", {
+  # If there are issues with registering methods we should get
+  # warnings. Just to be sure, check for messages as well.
+  expect_no_warning(codebook(dplyr::starwars))
 
-  expect_identical(default_skimmers, codebook_skimmers)
+  expect_no_message(codebook(dplyr::starwars))
+
+  # By default, skimr returns a long data frame. column types and
+  # stats are easier to check with partitioning.
+  res <- lapply(skimr::partition(codebook(dplyr::starwars)), names)
+  res_names <-
+    list(character = c("skim_variable", "n_missing", "complete_rate",
+                       "min", "max", "empty", "n_unique",
+                       "whitespace", "is_num_chr", "chr_values"),
+         integer = c("skim_variable", "n_missing", "complete_rate",
+                     "mean", "sd", "p0", "p1", "p25", "p50", "p75",
+                     "p99", "p100"),
+         list = c("skim_variable", "n_missing", "complete_rate",
+                  "n_unique", "min_length", "max_length"),
+         numeric = c("skim_variable", "n_missing", "complete_rate",
+                     "mean", "sd", "p0", "p25", "p50", "p75", "p100",
+                     "hist", "p1", "p99", "is_whole", "maybe_int"))
+  expect_identical(res, res_names)
 })
 
 test_that("`chr_values()` handles NA values", {
