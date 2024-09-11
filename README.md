@@ -1,7 +1,7 @@
 # asmisc
 
 <!-- badges: start -->
-[![R build status](https://github.com/svraka/asmisc/workflows/R-CMD-check/badge.svg)](https://github.com/svraka/asmisc/actions)
+[![R-CMD-check](https://github.com/svraka/asmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/svraka/asmisc/actions/workflows/R-CMD-check.yaml)
 [![CRAN](http://www.r-pkg.org/badges/version/asmisc)](https://cran.r-project.org/package=asmisc)
 <!-- badges: end -->
 
