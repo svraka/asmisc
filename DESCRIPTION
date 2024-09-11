@@ -15,8 +15,7 @@ Imports:
     lubridate,
     readr,
     skimr,
-    tibble,
-    utils
+    tibble
 RoxygenNote: 7.3.2
 Suggests:
     dplyr,
