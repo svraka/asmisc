@@ -6,8 +6,9 @@ test_that("all default skimmers are covered", {
   # the custom sfl cannot be defined. `integer` is left out, as skimr
   # treats them as numerics.
   codebook_skimmers <- sort(c("AsIs", "character", "complex", "Date",
-                              "difftime", "factor", "list", "logical",
-                              "numeric", "POSIXct", "Timespan", "ts"))
+                              "difftime", "factor", "haven_labelled",
+                              "list", "logical", "numeric", "POSIXct",
+                              "Timespan", "ts"))
 
   expect_identical(default_skimmers, codebook_skimmers)
 })
