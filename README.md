@@ -20,3 +20,14 @@ Or:
 ``` r
 renv::install("github::svraka/asmisc")
 ```
+
+### A note on dependencies
+
+This package is a collection of heterogeneous functionality, extending various packages with wrappers and helpers. Thus none of this package's dependencies are true hard dependencies. Nevertheless, everything is kept under `Imports`. My projects always use the
+[tidyverse](https://www.tidyverse.org) and
+[targets](https://docs.ropensci.org/targets/),
+almost always use
+[data.table](https://r-datatable.com),
+[fixest](https://lrberge.github.io/fixest/), and
+[DeclareDesign](https://declaredesign.org/r/declaredesign/).
+These cover almost all dependencies of this package (directly, or indirectly). Additionally, using hard dependencies simplifies maintenance (e.g. `codebook` registers S3 methods defined in skimr, and I don't want to deal with conditional registration).
