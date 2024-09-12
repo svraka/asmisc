@@ -78,10 +78,6 @@ get_skimmers.character_asmisc <- function(column) {
   )
 }
 
-# skimr treats integers and doubles as numerics. We want different
-# skimmers for these types. During the first pass of a CSV parsing
-# integers might be read as doubles but we want to check if they can
-# be stored as integers.
 #' @exportS3Method skimr::get_skimmers
 get_skimmers.integer <- function(column) {
   skimr::sfl(
@@ -98,10 +94,6 @@ get_skimmers.integer <- function(column) {
   )
 }
 
-# Numeric skimmers for `codebook()`. Drop histogram and add 1st and
-# 99th percentiles. The entire skim function list has to be recreated
-# because there's no other way of custom ordering (other than manually
-# reordering the `sfl` list but that isn't easier either).
 #' @exportS3Method skimr::get_skimmers
 get_skimmers.numeric_asmisc <- function(column) {
   skimr::sfl(
