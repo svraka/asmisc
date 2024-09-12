@@ -15,9 +15,6 @@
 #'   but should be informative nevertheless.}
 #' }
 #'
-#' If the \pkg{tibble} package is available, the data frame is
-#' converted into a tibble.
-#'
 #' @author András Svraka
 #'
 #' @seealso \code{\link[arrow:write_parquet]{write_parquet}},
@@ -36,9 +33,7 @@ metadata_parquet <- function(file) {
   pq_names <- pq_schema$names
   pq_types <- sapply(pq_schema$fields, function(x) x$type$ToString())
 
-  df <- data.frame(name = pq_names, type = pq_types, stringsAsFactors = FALSE)
-
-  if (requireNamespace("tibble")) df <- tibble::as_tibble(df)
+  df <- tibble::tibble(name = pq_names, type = pq_types)
 
   df
 }
