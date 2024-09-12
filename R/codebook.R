@@ -146,9 +146,9 @@ codebook <- function(data, ...) {
   stopifnot(requireNamespace("skimr", quietly = TRUE))
 
   skim_codebook <- skimr::skim_with(
-    character      = skimr::get_sfl("character_asmisc"),
-    integer        = skimr::get_sfl("integer"),
-    numeric        = skimr::get_sfl("numeric_asmisc")
+    character = skimr::get_sfl("character_asmisc"),
+    integer   = skimr::get_sfl("integer"),
+    numeric   = skimr::get_sfl("numeric_asmisc"),
   )
 
   res <- skim_codebook(data, ...)
