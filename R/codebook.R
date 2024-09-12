@@ -69,8 +69,7 @@ maybe_int <- function(x) {
   all(is_whole(x)) && all(!is.na(suppressWarnings(as.integer(x))))
 }
 
-#' @importFrom skimr get_skimmers
-#' @export
+#' @exportS3Method skimr::get_skimmers
 get_skimmers.character_asmisc <- function(column) {
   skimr::sfl(
     is_num_chr = is_num_chr,
@@ -83,7 +82,7 @@ get_skimmers.character_asmisc <- function(column) {
 # skimmers for these types. During the first pass of a CSV parsing
 # integers might be read as doubles but we want to check if they can
 # be stored as integers.
-#' @export
+#' @exportS3Method skimr::get_skimmers
 get_skimmers.integer <- function(column) {
   skimr::sfl(
     mean      = ~ mean(., na.rm = TRUE),
@@ -103,7 +102,7 @@ get_skimmers.integer <- function(column) {
 # 99th percentiles. The entire skim function list has to be recreated
 # because there's no other way of custom ordering (other than manually
 # reordering the `sfl` list but that isn't easier either).
-#' @export
+#' @exportS3Method skimr::get_skimmers
 get_skimmers.numeric_asmisc <- function(column) {
   skimr::sfl(
     mean      = ~ mean(., na.rm = TRUE),
@@ -152,6 +151,8 @@ get_skimmers.numeric_asmisc <- function(column) {
 #' @examples
 #' codebook(dplyr::starwars)
 codebook <- function(data, ...) {
+  stopifnot(requireNamespace("skimr", quietly = TRUE))
+
   skim_codebook <- skimr::skim_with(
     character      = skimr::get_sfl("character_asmisc"),
     integer        = skimr::get_sfl("integer"),

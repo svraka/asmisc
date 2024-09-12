@@ -30,4 +30,4 @@ almost always use
 [data.table](https://r-datatable.com),
 [fixest](https://lrberge.github.io/fixest/), and
 [DeclareDesign](https://declaredesign.org/r/declaredesign/).
-These cover almost all dependencies of this package (directly, or indirectly). Additionally, using hard dependencies simplifies maintenance (e.g. `codebook` registers S3 methods defined in skimr, and I don't want to deal with conditional registration).
+These cover almost all dependencies of this package (directly, or indirectly).
