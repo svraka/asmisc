@@ -6,7 +6,9 @@ test_that("Skimmers for `codebook()` are registered", {
   expect_no_warning(codebook(dplyr::starwars))
 
   expect_no_message(codebook(dplyr::starwars))
+})
 
+test_that("`codebook()` returns statistics in the right order", {
   # By default, skimr returns a long data frame. column types and
   # stats are easier to check with partitioning.
   res <- lapply(skimr::partition(codebook(dplyr::starwars)), names)
@@ -20,8 +22,9 @@ test_that("Skimmers for `codebook()` are registered", {
          list = c("skim_variable", "n_missing", "complete_rate",
                   "n_unique", "min_length", "max_length"),
          numeric = c("skim_variable", "n_missing", "complete_rate",
-                     "mean", "sd", "p0", "p25", "p50", "p75", "p100",
-                     "hist", "p1", "p99", "is_whole", "maybe_int"))
+                     "mean", "sd", "p0", "p1", "p25", "p50", "p75",
+                     "p99", "p100", "is_whole", "maybe_int"))
+
   expect_identical(res, res_names)
 })
 

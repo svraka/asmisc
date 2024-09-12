@@ -117,6 +117,7 @@ get_skimmers.numeric_asmisc <- function(column) {
     p100      = ~ stats::quantile(., probs = 1,    na.rm = TRUE, names = FALSE),
     is_whole  = is_whole,
     maybe_int = maybe_int,
+    hist      = NULL,
     skim_type = "numeric"
   )
 }
@@ -154,8 +155,31 @@ codebook <- function(data, ...) {
   skim_codebook <- skimr::skim_with(
     character      = skimr::get_sfl("character_asmisc"),
     integer        = skimr::get_sfl("integer"),
-    numeric        = skimr::get_sfl("numeric_asmisc"),
+    numeric        = skimr::get_sfl("numeric_asmisc")
   )
 
-  skim_codebook(data, ...)
+  res <- skim_codebook(data, ...)
+
+  # We are extending the default skimmers, thus computing default
+  # stats and our additions (and omit those set to `NULL`). The
+  # defaults contain stats named `p(0|25|50|75|100)`, which will
+  # retain their column position, and new ones are added to the end.
+  # To keep all quantiles together, we modify the results.
+  su <- attr(res, "skimmers_used")
+  if ("numeric" %in% names(su)) {
+    r1 <- "^numeric\\.p\\d+$"
+    ci <- min(grep(r1, colnames(res))) - 1
+    cn1 <- paste0("numeric.p", c("0", "1", "25", "50", "75", "99", "100"))
+    res <- dplyr::relocate(res, dplyr::all_of(cn1), .after = ci)
+
+    # Skimmed results seem to work just fine by modifying column order
+    # but to make sure everything works, we also modify attributes.
+    r2 <- "^numeric\\."
+    cn2 <- grep(r2, names(res), value = TRUE)
+    cn2 <- gsub(r2, "", cn2)
+    su[["numeric"]] <- cn2
+    attr(res, "skimmers_used") <- su
+  }
+
+  res
 }
