@@ -19,9 +19,6 @@ A data frame with two columns:
   method. This does not directly correspond to navtive R data types
   but should be informative nevertheless.}
 }
-
-If the \pkg{tibble} package is available, the data frame is
-converted into a tibble.
 }
 \description{
 Query column names and column types of an Apache Parquet data file.

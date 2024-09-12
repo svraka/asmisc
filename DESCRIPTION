@@ -12,16 +12,11 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     arrow,
-    dplyr,
     lubridate,
-    purrr,
     readr,
-    sjmisc,
     skimr,
-    stringr,
-    tibble,
-    utils
+    tibble
 RoxygenNote: 7.3.2
 Suggests:
-    testthat (>= 2.1.0),
-    tinytex
+    dplyr,
+    testthat (>= 2.1.0)

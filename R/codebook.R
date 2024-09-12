@@ -24,6 +24,21 @@ chr_values <- function(x, n = 5) {
   x
 }
 
+#' Check if a character vector can be converted to numeric
+#'
+#' @param x A character vector
+#' @return A single logical
+#' @export
+is_num_chr <- function(x) {
+  stopifnot(is.character(x))
+
+  # According to `?as.numeric`, "Conversion does trim whitespace;
+  # non-numeric strings give NA + warning". Thus, first we need to
+  # drop `NA`s, then try conversion
+  x_num <- suppressWarnings(as.numeric(stats::na.omit(x)))
+  !any(is.na(x_num))
+}
+
 #' Check if a vector might be coercible to integer
 #'
 #' @param x A numeric vector.
@@ -58,7 +73,7 @@ maybe_int <- function(x) {
 #' @export
 get_skimmers.character_asmisc <- function(column) {
   skimr::sfl(
-    is_num_chr = sjmisc::is_num_chr,
+    is_num_chr = is_num_chr,
     chr_values = chr_values,
     skim_type  = "character"
   )

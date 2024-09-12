@@ -6,8 +6,7 @@
 #' @param x A character vector.
 #' @param yn A character vector of length 2, containing the strings
 #'   for "yes" (first element) and "no" (second element). Defaults to
-#'   Hungarian shorthand for "igen" and "nem". Matches are case
-#'   sensitive.
+#'   Hungarian shorthand for "igen" and "nem".
 #' @param na_to_false Convert \code{NA}s to \code{FALSE}?
 #'
 #' @return A logical vector
@@ -24,7 +23,8 @@ yesno_to_logical <- function(x,
   # suffices.
   x_values <- sort(unique(x))
 
-  if (sjmisc::is_empty(x_values) == FALSE) {
+  # If `x` is all NA we can't do other checks.
+  if (length(x_values) > 0) {
     if (length(x_values) > 2){
       stop("`x` contains more than two distinct non-NA values.")
     }
@@ -33,13 +33,10 @@ yesno_to_logical <- function(x,
     }
   }
 
-  # We only want to match complete strings
-  yn <- stringr::str_c("^", yn, "$")
+  x[x == yn[1]] <- "TRUE"
+  x[x == yn[2]] <- "FALSE"
 
-  x <- stringr::str_replace(x, yn[1], "TRUE")
-  x <- stringr::str_replace(x, yn[2], "FALSE")
-
-  if (na_to_false == TRUE) x <- stringr::str_replace_na(x, "FALSE")
+  if (na_to_false == TRUE) x[is.na(x)] <- "FALSE"
 
   as.logical(x)
 }
@@ -67,7 +64,8 @@ mark_to_logical <- function(x,
   x_values <- sort(unique(x))
   morevalues_error <- "`x` contains non-NA values other than `mark`."
 
-  if (sjmisc::is_empty(x_values) == FALSE) {
+  # If `x` is all NA we can't do other checks.
+  if (length(x_values) > 0) {
     if (length(x_values) != 1) {
       stop(morevalues_error)
     }
@@ -76,12 +74,9 @@ mark_to_logical <- function(x,
     }
   }
 
-  # We only want to match complete strings
-  mark <- stringr::str_c("^", mark, "$")
+  x[x == mark] <- "TRUE"
 
-  x <- stringr::str_replace(x, mark, "TRUE")
-
-  if (na_to_false == TRUE) x <- stringr::str_replace_na(x, "FALSE")
+  if (na_to_false == TRUE) x[is.na(x)] <- "FALSE"
 
   as.logical(x)
 }
@@ -102,7 +97,7 @@ mark_to_logical <- function(x,
 parse_date_md <- function(x,
                           year,
                           format = "%Y%m%d") {
-  x <- stringr::str_c(year, x)
+  x <- paste0(year, x)
   x <- readr::parse_date(x, format = format)
 
   x
@@ -126,14 +121,13 @@ parse_date_ymd <- function(x, cutoff_2000 = 30L) {
   stopifnot(is.character(x) == TRUE)
 
   # Construct date string with century
-  century_19 <- as.integer(stringr::str_sub(x, 1, 2))
+  century_19 <- as.integer(substr(x, 1, 2))
   century_19 <- (century_19 > cutoff_2000)
   year_prefix <- rep("20", times = length(x))
   year_prefix[century_19] <- "19"
-  year_prefix[is.na(x)] <- ""
-  # Unlike `base::paste0()`, `stringr::str_c()` treats NAs as "infectious",
-  # which is exactly what we need here.
-  x <- stringr::str_c(year_prefix, x)
+  year_prefix[is.na(x)] <- NA
+  x <- paste0(year_prefix, x)
+  x[is.na(x) | is.na(year_prefix)] <- NA
 
   x <- lubridate::ymd(x)
 

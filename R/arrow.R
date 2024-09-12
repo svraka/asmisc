@@ -15,9 +15,6 @@
 #'   but should be informative nevertheless.}
 #' }
 #'
-#' If the \pkg{tibble} package is available, the data frame is
-#' converted into a tibble.
-#'
 #' @author András Svraka
 #'
 #' @seealso \code{\link[arrow:write_parquet]{write_parquet}},
@@ -36,9 +33,7 @@ metadata_parquet <- function(file) {
   pq_names <- pq_schema$names
   pq_types <- sapply(pq_schema$fields, function(x) x$type$ToString())
 
-  df <- data.frame(name = pq_names, type = pq_types, stringsAsFactors = FALSE)
-
-  if (requireNamespace("tibble")) df <- tibble::as_tibble(df)
+  df <- tibble::tibble(name = pq_names, type = pq_types)
 
   df
 }
@@ -152,8 +147,8 @@ get_chunk_paths <- function(dataset_base_name, file_nrow, chunk_size,
   # Pad partition numbers with zeros to keep the dataset's ordering
   # after reading with back `open_dataset()`
   max_nchar <- nchar(as.character(max(chunk_numbers)))
-  chunk_numbers <- stringr::str_pad(chunk_numbers, width = max_nchar,
-                                    side = "left", pad = "0")
+  fmt <- sprintf("%%0.%si", max_nchar)
+  chunk_numbers <- sprintf(fmt, chunk_numbers)
 
   hive_name <- paste0(chunk_col_name, "=", chunk_numbers)
 
@@ -173,7 +168,9 @@ prepare_dataset_base <- function(dataset_base_name, chunk_paths) {
   dir.create(dataset_base_name)
 
   # Partitioning directories need be created recursively.
-  purrr::walk(dirname(chunk_paths), dir.create)
+  x <- dirname(chunk_paths)
+  lapply(x, dir.create)
+  invisible(x)
 }
 
 #' Callback function to write Parquet partition

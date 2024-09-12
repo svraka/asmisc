@@ -11,8 +11,7 @@ yesno_to_logical(x, yn = c("I", "N"), na_to_false = FALSE)
 
 \item{yn}{A character vector of length 2, containing the strings
 for "yes" (first element) and "no" (second element). Defaults to
-Hungarian shorthand for "igen" and "nem". Matches are case
-sensitive.}
+Hungarian shorthand for "igen" and "nem".}
 
 \item{na_to_false}{Convert \code{NA}s to \code{FALSE}?}
 }
