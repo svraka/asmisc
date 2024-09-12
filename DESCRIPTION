@@ -11,12 +11,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    arrow,
     lubridate,
     readr,
     tibble
 RoxygenNote: 7.3.2
 Suggests:
+    arrow,
     dplyr,
     skimr,
     testthat (>= 2.1.0)

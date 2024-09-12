@@ -96,6 +96,8 @@ read_delim_chunked_to_dataset <- function(file,
                                           chunk_col_name = "chunk",
                                           chunk_file_name = "data.parquet",
                                           ...) {
+  stopifnot(requireNamespace("arrow", quietly = TRUE))
+
   chunk_paths <- get_chunk_paths(dataset_base_name, file_nrow,
                                  chunk_size, chunk_col_name,
                                  chunk_file_name)
@@ -122,6 +124,8 @@ read_delim_chunked_to_dataset <- function(file,
 write_single_partition_dataset <- function(df, dataset_base_name,
                                            chunk_col_name = "chunk",
                                            chunk_file_name = "data.parquet") {
+  stopifnot(requireNamespace("arrow", quietly = TRUE))
+
   chunk_paths <- get_chunk_paths(dataset_base_name, nrow(df),
                                  nrow(df), chunk_col_name,
                                  chunk_file_name)
