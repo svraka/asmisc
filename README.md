@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/svraka/asmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/svraka/asmisc/actions/workflows/R-CMD-check.yaml)
-[![CRAN](http://www.r-pkg.org/badges/version/asmisc)](https://cran.r-project.org/package=asmisc)
+[![CRAN](https://www.r-pkg.org/badges/version/asmisc)](https://cran.r-project.org/package=asmisc)
 <!-- badges: end -->
 
 A small collection of utility functions for personal use.
