@@ -3,6 +3,7 @@
 S3method(skimr::get_skimmers,character_asmisc)
 S3method(skimr::get_skimmers,integer)
 S3method(skimr::get_skimmers,numeric_asmisc)
+S3method(tibble::as_tibble,fixest_multi)
 export(chr_values)
 export(codebook)
 export(is_num_chr)
