@@ -13,3 +13,18 @@ test_that("Converting a single fixest model to a nested tibble fails", {
                # This a regex, the error might contain fancy quotes
                "cannot coerce class .\"fixest\". to a data.frame")
 })
+
+test_that("glance_custom.fixest works in single fixest models", {
+  expect_identical(modelsummary::glance_custom(est_s),
+                   data.frame("Family" = "OLS"))
+})
+
+test_that("We extended modelsummary GoFs", {
+  ms_multi <- modelsummary::modelsummary(est_m, output = "modelsummary_list")
+  glance_names <- unique(lapply(ms_multi, function(x) names(x[["glance"]])))
+
+  expect_length(glance_names, 1)
+  expect_identical(glance_names,
+                   list(c("aic", "bic", "r.squared", "adj.r.squared",
+                          "rmse", "nobs", "vcov.type", "Family")))
+})

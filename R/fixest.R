@@ -34,3 +34,34 @@ as_tibble.fixest_multi <- function(x) {
   res[["model"]] <- unname(as.list(x))
   res
 }
+
+#' Custom glances for fixest modelsummaries
+#'
+#' Add model family to glances in fixest modelsummaries using the
+#' [modelsummary::glance_custom()] customization interface.
+#'
+#' @inheritParams modelsummary::glance_custom
+#' @exportS3Method modelsummary::glance_custom
+glance_custom.fixest <- function(x, ...) {
+  # modelsummary always extracts single models from `fixest_multi`
+  # objects, thus. Just to make sure, we bail out if that is not the
+  # case
+  stopifnot(inherits(x, "fixest"))
+  # fixest doesn't expose a function to convert model families into
+  # readable labels, it's all done internally in `fixest::etable`. I
+  # don't want to copy it (and fixest is licenced under GPL anyway, so
+  # using it in our MIT project would be complicated), so we have to
+  # extract final labels from an `etable_df` object.
+  #
+  # I think an IID SE is always returned with the model object and
+  # after some testing, creating a table with `vcov = "iid"` is fast
+  # on model objects with high N, many RHS variables and FEs.
+  t <- fixest::etable(x, vcov = "iid", family = TRUE)
+  # In case of a single model we work with a data.frame of two
+  # columns, where the first contains row labels, and the second
+  # "stats".
+  family <- t[t[[1]] == "Family", ][[2]]
+
+  out <- data.frame("Family" = family)
+  return(out)
+}
