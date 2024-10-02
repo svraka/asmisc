@@ -16,7 +16,7 @@ Format dates according to the conventions of several languages.
 }
 \details{
 Currently only UK and US English, and Hungarian are
-  supported.
+supported.
 }
 \examples{
 locales <- c("en_GB", "en_US", "hu_HU")

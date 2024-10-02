@@ -13,11 +13,11 @@ metadata_parquet(file)
 A data frame with two columns:
 
 \describe{
-  \item{\code{name}}{Column names}
-  \item{\code{type}}{Column types, as returned by the
-  \code{\link[arrow:ParquetFileReader]{ParquetFileReader$GetSchema()}}
-  method. This does not directly correspond to navtive R data types
-  but should be informative nevertheless.}
+\item{\code{name}}{Column names}
+\item{\code{type}}{Column types, as returned by the
+\code{\link[arrow:ParquetFileReader]{ParquetFileReader$GetSchema()}}
+method. This does not directly correspond to navtive R data types
+but should be informative nevertheless.}
 }
 }
 \description{
@@ -30,8 +30,7 @@ metadata_parquet(tmp)
 
 }
 \seealso{
-\code{\link[arrow:write_parquet]{write_parquet}},
-  \code{\link[arrow:read_parquet]{read_parquet}}
+\code{\link[arrow:write_parquet]{arrow::write_parquet()}}, \code{\link[arrow:read_parquet]{arrow::read_parquet()}}
 }
 \author{
 András Svraka

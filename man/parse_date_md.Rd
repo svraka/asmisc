@@ -12,11 +12,11 @@ parse_date_md(x, year, format = "\%Y\%m\%d")
 \item{year}{An integer added to \code{x}}
 
 \item{format}{A format specification passed to
-\code{\link[readr]{parse_date}} used to parse a concatenated
-string of \code{year} and \code{x}.}
+\code{\link[readr:parse_datetime]{readr::parse_date()}} used to parse a concatenated string of
+\code{year} and \code{x}.}
 }
 \value{
-A \code{\link{Date}} vector
+A \code{\link[=Date]{Date()}} vector
 }
 \description{
 A helper function to add a specified year to a month-day-like

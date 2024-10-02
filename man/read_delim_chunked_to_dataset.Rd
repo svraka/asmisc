@@ -46,14 +46,13 @@ partitioned Parquet files to.}
 \item{file_nrow}{Number of data rows in \code{file}. As there is no
 reliable and cross-platform way to get the exact number of lines
 in a compressed file, this has to be set manually to calculate
-the number of chunks and the names of partitions. Use \code{wc}
-on a Unix-like system to determine row count (\code{zcat file.gz
-| wc -l}, or similar). Only count rows considered as data,
-otherwise the dataset's partitioning scheme will have empty
-directories. This does not result in errors but it is undesirable
-for human-readability. Subtract from the row count any header
-row(s), or the number of lines skipped with the \code{skip}
-(again, \code{zcat file.gz | head}, or similar can be useful).}
+the number of chunks and the names of partitions. Use \code{wc} on a
+Unix-like system to determine row count (\verb{zcat file.gz | wc -l},
+or similar). Only count rows considered as data, otherwise the
+dataset's partitioning scheme will have empty directories. This
+does not result in errors but it is undesirable for
+human-readability. Subtract from the row count any header row(s),
+or the number of lines skipped with the \code{skip} (again, \verb{zcat file.gz | head}, or similar can be useful).}
 
 \item{chunk_size}{The number of rows to include in each chunk}
 
@@ -67,34 +66,34 @@ numbers in the Hive-style partition structure.}
 \item{chunk_file_name}{Name of the individual Parquet files in the
 Hive-style partition structure.}
 
-\item{...}{Passed to \code{\link[readr]{read_delim_chunked}}}
+\item{...}{Passed to \code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}}}
 
 \item{df}{A data frame}
 }
 \value{
 Invisibly return a tibble with parsing problems caught by
-  \pkg{readr} (see \code{\link[readr]{problems}}). \code{NULL} if
-  no parsing problems occurred.
+\pkg{readr} (see \code{\link[readr:problems]{readr::problems()}}). \code{NULL} if no parsing
+problems occurred.
 }
 \description{
 Read a single delimited file in chunks using
-\code{\link[readr]{read_delim_chunked}} and save chunks in Parquet
-files under a simple Hive-style partitioned directory (i.e.
-\code{dataset_base_name/chunk=XX/data.parquet}) to be used as the
-source of a multi-file Apache Arrow dataset.
+\code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}} and save chunks in Parquet files
+under a simple Hive-style partitioned directory (i.e.
+\code{dataset_base_name/chunk=XX/data.parquet}) to be used as the source
+of a multi-file Apache Arrow dataset.
 }
 \details{
 The main goal of this function is to read a single, large,
-  unpartitioned delimited file into a partitioned Arrow dataset on
-  a RAM limited machine. Therefore these Arrow partitions have no
-  inherent meaning. Although \code{processing_function} allows
-  flexible changes during reading in, this function was intended to
-  be used in workflows where only minimal data processing is done
-  and the original structure of the delimited files is kept
-  unchanged. Thus \code{read_delim_chunked_to_dataset} will create
-  a partitioning that keeps the original row order from the
-  delimited file. However, within partition ordering can be changed
-  through \code{processing_function}.
+unpartitioned delimited file into a partitioned Arrow dataset on a
+RAM limited machine. Therefore these Arrow partitions have no
+inherent meaning. Although \code{processing_function} allows flexible
+changes during reading in, this function was intended to be used in
+workflows where only minimal data processing is done and the
+original structure of the delimited files is kept unchanged. Thus
+\code{read_delim_chunked_to_dataset} will create a partitioning that
+keeps the original row order from the delimited file. However,
+within partition ordering can be changed through
+\code{processing_function}.
 }
 \section{Functions}{
 \itemize{
@@ -102,6 +101,6 @@ The main goal of this function is to read a single, large,
 
 }}
 \seealso{
-\code{vignette(topic = "dataset", package = "arrow")} on
-how to use mult-file Apache Arrow datasets.
+\code{vignette(topic = "dataset", package = "arrow")} on how to use
+multi-file Apache Arrow datasets.
 }

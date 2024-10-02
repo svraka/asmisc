@@ -13,27 +13,25 @@ codebook(data, ...)
 default is to skim all columns.}
 }
 \value{
-A custom \code{\link[skimr]{skim}} output. Unlike
-  \code{\link[skimr]{skim}}, histograms are not generated but there
-  are additional skimmers:
+A custom \code{\link[skimr:skim]{skimr::skim()}} output. Unlike \code{\link[skimr:skim]{skimr::skim()}}, histograms
+are not generated but there are additional skimmers:
 
-  \describe{
-    \item{\code{integer}}{By default, \pkg{skimr} handles integers
-      and doubles identically. We separate the two. For integers
-      we add more quantiles to the default statistics.}
-    \item{\code{numeric}}{For doubles. In addition to statistics
-      in \code{integer}, we also check wether the column could be
-      converted to integer.}
-    \item{\code{character}}{Extend default statistics with a check
-      whether the column could be converted to numeric and list the
-      first couple of unique values.}
-  }
+\describe{
+\item{\code{integer}}{By default, \pkg{skimr} handles integers
+and doubles identically. We separate the two. For integers
+we add more quantiles to the default statistics.}
+\item{\code{numeric}}{For doubles. In addition to statistics
+in \code{integer}, we also check wether the column could be
+converted to integer.}
+\item{\code{character}}{Extend default statistics with a check
+whether the column could be converted to numeric and list the
+first couple of unique values.}
+}
 }
 \description{
-Create a codebook of a data frame using \code{\link[skimr]{skim}}
-that can help fine-tuning \code{col_types} and help with simple
-data cleaning tasks when processing a delimited file using
-\pkg{readr}.
+Create a codebook of a data frame using \code{\link[skimr:skim]{skimr::skim()}} that can
+help fine-tuning \code{col_types} and help with simple data cleaning
+tasks when processing a delimited file using \pkg{readr}.
 }
 \examples{
 codebook(dplyr::starwars)

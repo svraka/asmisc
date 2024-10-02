@@ -15,13 +15,13 @@ as though starting with \code{19}. Available only for functions relying on
 \code{lubridate}s internal parser.}
 }
 \value{
-A vector of class \code{\link[base]{Date}}
+A vector of class \code{\link[base:Dates]{base::Date()}}
 }
 \description{
-Helper function to convert dates stored as strings containing six digits in a
-\code{yymmdd} format using \code{\link[lubridate]{ymd}}.
+Helper function to convert dates stored as strings containing six
+digits in a \code{yymmdd} format using \code{\link[lubridate:ymd]{lubridate::ymd()}}.
 }
 \details{
-\code{cutoff_2000} defaults to 30 which is a convenient
-  value for my work.
+\code{cutoff_2000} defaults to 30 which is a convenient value
+for my work.
 }

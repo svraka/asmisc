@@ -17,6 +17,6 @@ mark_to_logical(x, mark = "X", na_to_false = FALSE)
 A logical vector
 }
 \description{
-A helper function to convert a character vector to logical where a single character
-string represents \code{TRUE}.
+A helper function to convert a character vector to logical where a
+single character string represents \code{TRUE}.
 }

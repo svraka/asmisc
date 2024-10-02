@@ -14,12 +14,11 @@ does arbitrary data processing on it before writing the resulting
 data frame into its Parquet partition.}
 }
 \value{
-A function to be used in
-  \code{\link{read_delim_chunked_to_dataset}}.
+A function to be used in \code{\link[=read_delim_chunked_to_dataset]{read_delim_chunked_to_dataset()}}.
 }
 \description{
 A function factory that creates a callback function for
-\code{\link[readr]{read_delim_chunked}}.
+\code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}}.
 }
 \seealso{
 \url{https://stackoverflow.com/a/49241426}

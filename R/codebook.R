@@ -1,6 +1,6 @@
 #' Helper function to list top values of a character vector
 #'
-#' List the first \code{n} unique values that cannot be coerced into
+#' List the first `n` unique values that cannot be coerced into
 #' numeric of a character vector.
 #'
 #' @param x A character vector
@@ -45,16 +45,17 @@ is_num_chr <- function(x) {
 #'
 #' @return A single logical.
 #'
-#' @details Take the results from these function with caution, as
-#'   floating point precision can affect rounding. They are intended
-#'   to be used for deciding what \code{col_type} to choose for a
-#'   column in a delimited file when processing it with \pkg{readr}
-#'   functions. If the original data is not an integer, \pkg{readr}
-#'   will issue parsing errors.
+#' @details
+#'
+#' Take the results from these function with caution, as floating
+#' point precision can affect rounding. They are intended to be used
+#' for deciding what `col_type` to choose for a column in a delimited
+#' file when processing it with \pkg{readr} functions. If the original
+#' data is not an integer, \pkg{readr} will issue parsing errors.
 #'
 #' @describeIn is_whole Check if vector only has whole values. Return
-#'   \code{TRUE} for whole values larger than the largest integer
-#'   which can be represented.
+#'   `TRUE` for whole values larger than the largest integer which can
+#'   be represented.
 #'
 #' @export
 is_whole <- function(x) {
@@ -115,28 +116,28 @@ get_skimmers.numeric_asmisc <- function(column) {
 
 #' Create a codebook from a data frame
 #'
-#' Create a codebook of a data frame using \code{\link[skimr]{skim}}
-#' that can help fine-tuning \code{col_types} and help with simple
-#' data cleaning tasks when processing a delimited file using
-#' \pkg{readr}.
+#' Create a codebook of a data frame using [skimr::skim()] that can
+#' help fine-tuning `col_types` and help with simple data cleaning
+#' tasks when processing a delimited file using \pkg{readr}.
 #'
 #' @inheritParams skimr::skim
 #'
-#' @return A custom \code{\link[skimr]{skim}} output. Unlike
-#'   \code{\link[skimr]{skim}}, histograms are not generated but there
-#'   are additional skimmers:
+#' @return
 #'
-#'   \describe{
-#'     \item{\code{integer}}{By default, \pkg{skimr} handles integers
-#'       and doubles identically. We separate the two. For integers
-#'       we add more quantiles to the default statistics.}
-#'     \item{\code{numeric}}{For doubles. In addition to statistics
-#'       in \code{integer}, we also check wether the column could be
-#'       converted to integer.}
-#'     \item{\code{character}}{Extend default statistics with a check
-#'       whether the column could be converted to numeric and list the
-#'       first couple of unique values.}
-#'   }
+#' A custom [skimr::skim()] output. Unlike [skimr::skim()], histograms
+#' are not generated but there are additional skimmers:
+#'
+#' \describe{
+#'   \item{`integer`}{By default, \pkg{skimr} handles integers
+#'   and doubles identically. We separate the two. For integers
+#'   we add more quantiles to the default statistics.}
+#'   \item{`numeric`}{For doubles. In addition to statistics
+#'   in `integer`, we also check wether the column could be
+#'   converted to integer.}
+#'   \item{`character`}{Extend default statistics with a check
+#'   whether the column could be converted to numeric and list the
+#'   first couple of unique values.}
+#' }
 #'
 #' @export
 #'

@@ -11,6 +11,6 @@ prepare_dataset_base(dataset_base_name, chunk_paths)
 partitioned Parquet files to.}
 }
 \description{
-To be used with \code{\link{read_delim_chunked_to_dataset}}.
+To be used with \code{\link[=read_delim_chunked_to_dataset]{read_delim_chunked_to_dataset()}}.
 }
 \keyword{internal}

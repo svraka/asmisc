@@ -7,7 +7,7 @@
 #' @param yn A character vector of length 2, containing the strings
 #'   for "yes" (first element) and "no" (second element). Defaults to
 #'   Hungarian shorthand for "igen" and "nem".
-#' @param na_to_false Convert \code{NA}s to \code{FALSE}?
+#' @param na_to_false Convert `NA`s to `FALSE`?
 #'
 #' @return A logical vector
 #' @export
@@ -43,12 +43,12 @@ yesno_to_logical <- function(x,
 
 #' Convert character mark to logical
 #'
-#' A helper function to convert a character vector to logical where a single character
-#' string represents \code{TRUE}.
+#' A helper function to convert a character vector to logical where a
+#' single character string represents `TRUE`.
 #'
 #' @param x A character vector.
-#' @param mark A string representing \code{TRUE}.
-#' @param na_to_false Convert \code{NA}s to \code{FALSE}?
+#' @param mark A string representing `TRUE`.
+#' @param na_to_false Convert `NA`s to `FALSE`?
 #'
 #' @return A logical vector
 #' @export
@@ -87,12 +87,12 @@ mark_to_logical <- function(x,
 #' character and parse as date.
 #'
 #' @param x A character vector containing month-day-like strings
-#' @param year An integer added to \code{x}
+#' @param year An integer added to `x`
 #' @param format A format specification passed to
-#'   \code{\link[readr]{parse_date}} used to parse a concatenated
-#'   string of \code{year} and \code{x}.
+#'   [readr::parse_date()] used to parse a concatenated string of
+#'   `year` and `x`.
 #'
-#' @return A \code{\link{Date}} vector
+#' @return A [Date()] vector
 #' @export
 parse_date_md <- function(x,
                           year,
@@ -105,19 +105,19 @@ parse_date_md <- function(x,
 
 #' Parse date string without century
 #'
-#' Helper function to convert dates stored as strings containing six digits in a
-#' \code{yymmdd} format using \code{\link[lubridate]{ymd}}.
+#' Helper function to convert dates stored as strings containing six
+#' digits in a `yymmdd` format using [lubridate::ymd()].
 #'
 #' @inheritParams readr::parse_date
 #' @inheritParams lubridate::parse_date_time
-#' @return A vector of class \code{\link[base]{Date}}
-#' @details \code{cutoff_2000} defaults to 30 which is a convenient
-#'   value for my work.
+#' @return A vector of class [base::Date()]
+#' @details `cutoff_2000` defaults to 30 which is a convenient value
+#'   for my work.
 #' @export
 parse_date_ymd <- function(x, cutoff_2000 = 30L) {
-  # `lubridate::ymd()` works on numeric vectors as well but we ensure a
-  # character input so we don't run into problems with dates from the 2000s, i.e
-  # leading zeros cut off.
+  # `lubridate::ymd()` works on numeric vectors as well but we ensure
+  # a character input so we don't run into problems with dates from
+  # the 2000s, i.e leading zeros cut off.
   stopifnot(is.character(x) == TRUE)
 
   # Construct date string with century
