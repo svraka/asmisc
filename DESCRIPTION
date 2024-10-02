@@ -16,6 +16,7 @@ Imports:
     tibble
 Suggests:
     arrow,
+    broom,
     dplyr,
     fixest,
     modelsummary,
