@@ -164,7 +164,7 @@ codebook <- function(data, ...) {
     r1 <- "^numeric\\.p\\d+$"
     ci <- min(grep(r1, colnames(res))) - 1
     cn1 <- paste0("numeric.p", c("0", "1", "25", "50", "75", "99", "100"))
-    res <- dplyr::relocate(res, dplyr::all_of(cn1), .after = ci)
+    res <- dplyr::relocate(res, dplyr::all_of(cn1), .after = dplyr::all_of(ci))
 
     # Skimmed results seem to work just fine by modifying column order
     # but to make sure everything works, we also modify attributes.
