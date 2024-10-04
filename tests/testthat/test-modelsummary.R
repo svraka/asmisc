@@ -11,6 +11,7 @@ test_that("helper", {
 
   expect_identical(names(ms), c("tidy", "glance"))
   expect_true(inherits(ms, "modelsummary_list"))
+  expect_snapshot(modelsummary::modelsummary(ms))
 })
 
 test_that("default method", {
@@ -18,12 +19,14 @@ test_that("default method", {
 
   expect_identical(names(ms), c("tidy", "glance"))
   expect_true(inherits(ms, "modelsummary_list"))
+  expect_snapshot(modelsummary::modelsummary(ms))
 })
 
 test_that("fixest method", {
   ms <- as.modelsummary_list_custom(est_s)
   expect_identical(names(ms), c("tidy", "glance"))
   expect_true(inherits(ms, "modelsummary_list"))
+  expect_snapshot(modelsummary::modelsummary(ms))
 })
 
 test_that("fixest multiple estimation models are not supported", {
