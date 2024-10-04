@@ -18,7 +18,8 @@ Suggests:
     arrow,
     dplyr,
     skimr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
