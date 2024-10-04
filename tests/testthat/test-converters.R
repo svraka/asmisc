@@ -1,5 +1,3 @@
-context("Converters")
-
 test_that("`yesno_to_logical()` fails on wrong input", {
   x <- c("I", "N", "I")
 

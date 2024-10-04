@@ -1,14 +1,10 @@
-context("Datesets")
-
+withr::local_options(list(readr.show_col_types = FALSE))
 file <- readr::readr_example("mtcars.csv")
-tmp <- tempfile()
-dataset_path <- file.path(tmp, "mtcars")
-
-setup({dir.create(tmp)})
-teardown({unlink(tmp, recursive = TRUE)})
+df_base <- readr::read_csv(file)
 
 test_that("A roundtrip from file to dataset does not change any data", {
-  df <- readr::read_csv(file)
+  df <- df_base
+  dataset_path <- withr::local_tempfile()
 
   read_delim_chunked_to_dataset(file, dataset_path, file_nrow = nrow(df),
                                 chunk_size = 5, delim = ",")
@@ -18,7 +14,7 @@ test_that("A roundtrip from file to dataset does not change any data", {
 
   expect_equal(
     ds, df,
-    check.attributes = FALSE # ignore rownames, etc.
+    ignore_attr = TRUE # ignore rownames, etc.
   )
 })
 
@@ -26,8 +22,9 @@ test_that("A roundtrip from file to dataset does not change any data other than 
   test_processing_function <- function(df) {
     dplyr::mutate(df, test_col = "foo")
   }
+  dataset_path <- withr::local_tempfile()
 
-  df <- readr::read_csv(file)
+  df <- df_base
   df <- test_processing_function(df)
 
   read_delim_chunked_to_dataset(file, dataset_path,
@@ -40,12 +37,13 @@ test_that("A roundtrip from file to dataset does not change any data other than 
 
   expect_equal(
     ds, df,
-    check.attributes = FALSE
+    ignore_attr = TRUE
   )
 })
 
 test_that("`write_single_partition_dataset()` writes only one partition", {
-  df <- readr::read_csv(file)
+  df <- df_base
+  dataset_path <- withr::local_tempfile()
   write_single_partition_dataset(df, dataset_path)
 
   ds <- arrow::open_dataset(dataset_path)
@@ -55,7 +53,8 @@ test_that("`write_single_partition_dataset()` writes only one partition", {
 })
 
 test_that("`write_single_partition_dataset()` does not change any data", {
-  df <- readr::read_csv(file)
+  df <- df_base
+  dataset_path <- withr::local_tempfile()
   write_single_partition_dataset(df, dataset_path)
 
   ds <- dplyr::collect(arrow::open_dataset(dataset_path))
@@ -63,12 +62,13 @@ test_that("`write_single_partition_dataset()` does not change any data", {
 
   expect_equal(
     ds, df,
-    check.attributes = FALSE
+    ignore_attr = TRUE
   )
 })
 
 test_that("Parsing warnings are not silenced", {
-  df <- readr::read_csv(file)
+  df <- df_base
+  dataset_path <- withr::local_tempfile()
 
   expect_warning(
     res <- read_delim_chunked_to_dataset(file, dataset_path,
@@ -83,6 +83,8 @@ test_that("Parsing warnings are not silenced", {
 })
 
 test_that("Determining chunk paths is correct", {
+  dataset_path <- withr::local_tempfile()
+
   expect_identical(
     get_chunk_paths(dataset_path, 10, 5),
     file.path(dataset_path, sprintf("chunk=%d", 1:2), "data.parquet")

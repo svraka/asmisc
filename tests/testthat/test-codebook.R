@@ -1,5 +1,3 @@
-context("Codebook")
-
 test_that("Skimmers for `codebook()` are registered", {
   # If there are issues with registering methods we should get
   # warnings. Just to be sure, check for messages as well.
