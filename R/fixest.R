@@ -35,6 +35,24 @@ as_tibble.fixest_multi <- function(x) {
   res
 }
 
+#' Convert a `fixest` object to a nested tibble
+#'
+#' Convert a `fixest` object to a nested tibble, allowing easy
+#' tidying, along with multiple estimation models nested using
+#' `as_tibble.fixest_multi()`.
+#'
+#' @param x A `fixest` object
+#'
+#' @return
+#'
+#' A tibble with one row and two columns, `id = 1L`, and `model =
+#' list(x)`.
+#'
+#' @exportS3Method tibble::as_tibble
+as_tibble.fixest <- function(x) {
+  tibble::tibble(id = 1L, model = list(x))
+}
+
 #' Custom glances for fixest modelsummaries
 #'
 #' Add model family to glances in fixest modelsummaries using the

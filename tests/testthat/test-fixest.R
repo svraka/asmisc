@@ -8,10 +8,10 @@ test_that("Converting fixest_multi to a nested tibble", {
   expect_true(all(sapply(t[["model"]], function(x) inherits(x, "fixest"))))
 })
 
-test_that("Converting a single fixest model to a nested tibble fails", {
-  expect_error(tibble::as_tibble(est_s),
-               # This a regex, the error might contain fancy quotes
-               "cannot coerce class .\"fixest\". to a data.frame")
+test_that("Converting fixest to a nested tibble", {
+  t <- tibble::as_tibble(est_s)
+
+  expect_identical(t, tibble::tibble(id = 1L, model = list(est_s)))
 })
 
 test_that("glance_custom.fixest works in single fixest models", {
