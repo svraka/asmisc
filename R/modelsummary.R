@@ -84,7 +84,7 @@ as.modelsummary_list_custom.default <- function(x, ...) {
 as.modelsummary_list_custom.fixest <- function(x, conf.int = TRUE, ...) {
   tidy <- broom::tidy(x, conf.int = conf.int, ...)
   ms <- modelsummary::modelsummary(x, output = "modelsummary_list")
-  glance <- ms[["glance"]]
+  glance <- tibble::as_tibble(ms[["glance"]])
 
   ret <- as.modelsummary_list(tidy, glance)
   ret
