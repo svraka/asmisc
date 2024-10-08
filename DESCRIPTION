@@ -16,7 +16,10 @@ Imports:
     tibble
 Suggests:
     arrow,
+    broom,
     dplyr,
+    fixest,
+    modelsummary,
     skimr,
     testthat (>= 3.0.0),
     withr
