@@ -46,3 +46,13 @@ test_that("arguments are passed on", {
   expect_identical(attr(sm3[["tidy"]][["std.error"]], "type"),
                    "Clustered (cyl)")
 })
+
+test_that("unnest_modelsummary_list", {
+  df <- tibble::as_tibble(est_m)
+  df[["model"]] <- lapply(df[["model"]], as.modelsummary_list_custom)
+
+  expect_identical(names(unnest_modelsummary_list(df)),
+                   c("id", "lhs", "model_tidy", "model_glance"))
+  expect_identical(names(unnest_modelsummary_list(df, remove = FALSE)),
+                   c("id", "lhs", "model", "model_tidy", "model_glance"))
+})
