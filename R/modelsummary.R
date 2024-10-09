@@ -82,6 +82,17 @@ as.modelsummary_list_custom.default <- function(x, ...) {
 #' @rdname as.modelsummary_list_custom
 #' @export
 as.modelsummary_list_custom.fixest <- function(x, conf.int = TRUE, ...) {
+  # By default modelsummary runs a broom and an easystats extraction
+  # and combines their results. Some steps used by the easystats
+  # extraction methods in `parameters::model_parameters()` and
+  # `performance::model_parameters()` can be very slow for fixest
+  # models estimated on large datasets and lots of parameters (AFAIU
+  # mainly because it tries to deparse calls and environments). None
+  # of the extra information from easystats makes much difference, so
+  # we skip it entirely.
+  oldopt <- getOption("modelsummary_get")
+  on.exit(options(modelsummary_get = oldopt), add = TRUE)
+  options(modelsummary_get = "broom")
   tidy <- broom::tidy(x, conf.int = conf.int, ...)
   ms <- modelsummary::modelsummary(x, output = "modelsummary_list")
   glance <- tibble::as_tibble(ms[["glance"]])
