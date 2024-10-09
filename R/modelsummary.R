@@ -82,6 +82,9 @@ as.modelsummary_list_custom.default <- function(x, ...) {
 #' @rdname as.modelsummary_list_custom
 #' @export
 as.modelsummary_list_custom.fixest <- function(x, conf.int = TRUE, ...) {
+  oldopt <- getOption("modelsummary_get")
+  on.exit(options(modelsummary_get = oldopt), add = TRUE)
+  options(modelsummary_get = "broom")
   tidy <- broom::tidy(x, conf.int = conf.int, ...)
   ms <- modelsummary::modelsummary(x, output = "modelsummary_list")
   glance <- tibble::as_tibble(ms[["glance"]])
