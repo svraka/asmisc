@@ -40,21 +40,18 @@ as.modelsummary_list <- function(tidy, glance) {
 #' and environments which are difficult to serialise.
 #'
 #' A `modelsummary_list` object made with `modelsummary(models, output
-#' = "modelsummary_list")` does most of what we want but
-#' \pkg{modelsummary} relies on the \pkg{sandwich} package to
-#' manipulate variance-covariance matrices and we want to stick to
-#' \pkg{fixest}'s internal utilities wherever possible. Therefore we
-#' use [broom::tidy()] to obtain information on parameters, which
-#' always passes further arguments to \pkg{fixest}. This the same in
-#' all current methods for the "tidy" part of `modelsummary_list`. For
-#' the "glance" part we use [broom::tidy()] in the default method but
-#' we use data obtained from \pkg{modelsummary}'s custom internal
-#' glance implementation, as it provides useful additions for
-#' \pkg{fixest} models (like adding fixed effects, which we also
-#' extend via \pkg{modelsummary}'s customization interface, see
-#' [glance_custom.fixest()]). This works for our goal, as glances
-#' don't use any of the special arguments in
-#' [fixest::summary.fixest()]).
+#' = "modelsummary_list")` does most of what we want, except for
+#' adding confindence intervals. \pkg{modelsummary} can add confidence
+#' intervals to tables but want to store it here, so that it is
+#' available for any other use, including plotting. Therefore we use
+#' [broom::tidy()] to obtain information on parameters. For the
+#' "glance" part we use [broom::tidy()] in the default method but we
+#' use data obtained from \pkg{modelsummary}'s custom internal glance
+#' implementation, as it provides useful additions for \pkg{fixest}
+#' models (like adding fixed effects, which we also extend via
+#' \pkg{modelsummary}'s customization interface, see
+#' [glance_custom.fixest()], or proper information on the types of
+#' standard errors).
 #'
 #' The drawback of this approach is that we can't use some
 #' \pkg{modelsummary} features, like [reference
@@ -94,7 +91,7 @@ as.modelsummary_list_custom.fixest <- function(x, conf.int = TRUE, ...) {
   on.exit(options(modelsummary_get = oldopt), add = TRUE)
   options(modelsummary_get = "broom")
   tidy <- broom::tidy(x, conf.int = conf.int, ...)
-  ms <- modelsummary::modelsummary(x, output = "modelsummary_list")
+  ms <- modelsummary::modelsummary(x, output = "modelsummary_list", ...)
   glance <- tibble::as_tibble(ms[["glance"]])
 
   ret <- as.modelsummary_list(tidy, glance)

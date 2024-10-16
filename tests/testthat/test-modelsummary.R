@@ -36,8 +36,8 @@ test_that("fixest multiple estimation models are not supported", {
 
 test_that("arguments are passed on", {
   sm1 <- as.modelsummary_list_custom(est_s)
-  sm2 <- as.modelsummary_list_custom(est_s, vcov = "hetero")
-  sm3 <- as.modelsummary_list_custom(est_s, vcov = fixest::vcov_cluster("cyl"))
+  sm2 <- as.modelsummary_list_custom(est_s, vcov = "HC1")
+  sm3 <- as.modelsummary_list_custom(est_s, vcov = ~ cyl)
 
   expect_identical(attr(sm1[["tidy"]][["std.error"]], "type"),
                    "IID")

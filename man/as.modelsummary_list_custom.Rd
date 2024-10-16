@@ -33,21 +33,18 @@ Motivation for this generic comes from the need to save
 result in hard to serialize objects, as \pkg{fixest} stores calls
 and environments which are difficult to serialise.
 
-A \code{modelsummary_list} object made with \code{modelsummary(models, output = "modelsummary_list")} does most of what we want but
-\pkg{modelsummary} relies on the \pkg{sandwich} package to
-manipulate variance-covariance matrices and we want to stick to
-\pkg{fixest}'s internal utilities wherever possible. Therefore we
-use \code{\link[broom:reexports]{broom::tidy()}} to obtain information on parameters, which
-always passes further arguments to \pkg{fixest}. This the same in
-all current methods for the "tidy" part of \code{modelsummary_list}. For
-the "glance" part we use \code{\link[broom:reexports]{broom::tidy()}} in the default method but
-we use data obtained from \pkg{modelsummary}'s custom internal
-glance implementation, as it provides useful additions for
-\pkg{fixest} models (like adding fixed effects, which we also
-extend via \pkg{modelsummary}'s customization interface, see
-\code{\link[=glance_custom.fixest]{glance_custom.fixest()}}). This works for our goal, as glances
-don't use any of the special arguments in
-\code{\link[fixest:summary.fixest]{fixest::summary.fixest()}}).
+A \code{modelsummary_list} object made with \code{modelsummary(models, output = "modelsummary_list")} does most of what we want, except for
+adding confindence intervals. \pkg{modelsummary} can add confidence
+intervals to tables but want to store it here, so that it is
+available for any other use, including plotting. Therefore we use
+\code{\link[broom:reexports]{broom::tidy()}} to obtain information on parameters. For the
+"glance" part we use \code{\link[broom:reexports]{broom::tidy()}} in the default method but we
+use data obtained from \pkg{modelsummary}'s custom internal glance
+implementation, as it provides useful additions for \pkg{fixest}
+models (like adding fixed effects, which we also extend via
+\pkg{modelsummary}'s customization interface, see
+\code{\link[=glance_custom.fixest]{glance_custom.fixest()}}, or proper information on the types of
+standard errors).
 
 The drawback of this approach is that we can't use some
 \pkg{modelsummary} features, like \href{https://modelsummary.com/vignettes/modelsummary.html#reference-categories}{reference categories}
