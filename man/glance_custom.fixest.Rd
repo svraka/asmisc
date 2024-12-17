@@ -9,9 +9,29 @@
 \arguments{
 \item{x}{model or other R object to convert to single-row data frame}
 
-\item{...}{ellipsis}
+\item{...}{Further arguments passed to \code{\link[fixest:fitstat]{fixest::fitstat()}}'s \code{...}
+argument.}
 }
 \description{
-Add model family to glances in fixest modelsummaries using the
+Add further glances to fixest modelsummaries using the
 \code{\link[modelsummary:glance_custom]{modelsummary::glance_custom()}} customization interface.
+}
+\details{
+By default \code{\link[modelsummary:modelsummary]{modelsummary::modelsummary()}} adds a lot of useful
+information to glances (fixed effects, VCOV types) but omits some
+others which are often important, and \code{\link[fixest:etable]{fixest::etable()}} makes
+their reporting easy. We extend the custom glance with the
+following:
+\itemize{
+\item Family (OLS, Poisson, etc.)
+\item IV fit statistics. Note, this is likely to require further
+processing with a custom \code{\link[modelsummary:gof_map]{modelsummary::gof_map}} to clean up
+names of statistics and which instrument they refer to. Due to
+the way \pkg{modelsummary} handles \code{...}s, we cannot pass on
+further arguments, therefore we include all but Wald tests. They
+are omitted because their value depends on the VCOV type which,
+cannot be passed on either. (\code{\link[fixest:fitstat]{fixest::fitstat()}} lists Wald and
+DoF for t-tests (aka G) as two examples where VCOV is needed,
+checking the source confirms that it is not used anywhere else.)
+}
 }
