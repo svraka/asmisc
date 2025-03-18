@@ -66,6 +66,7 @@ as.modelsummary_list_custom <- function(x, ...) {
 }
 
 #' @rdname as.modelsummary_list_custom
+#' @export
 as.modelsummary_list_custom.default <- function(x, ...) {
   tidy <- broom::tidy(x, ...)
   glance <- broom::glance(x, ...)
