@@ -17,6 +17,7 @@ Imports:
 Suggests:
     arrow,
     broom,
+    data.table,
     dplyr,
     fixest,
     modelsummary,
