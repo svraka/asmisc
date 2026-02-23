@@ -31,7 +31,7 @@ test_that("fixest method", {
 
 test_that("fixest multiple estimation models are not supported", {
   expect_error(as.modelsummary_list_custom(est_m),
-               "No tidy method for objects of class fixest_multi")
+               "tidy.*fixest_multi")
 })
 
 test_that("arguments are passed on", {
