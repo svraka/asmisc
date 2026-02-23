@@ -16,7 +16,7 @@ parse_date_md(x, year, format = "\%Y\%m\%d")
 \code{year} and \code{x}.}
 }
 \value{
-A \code{\link[=Date]{Date()}} vector
+A \code{\link[base:Dates]{base::Date()}} vector
 }
 \description{
 A helper function to add a specified year to a month-day-like

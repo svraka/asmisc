@@ -92,7 +92,7 @@ mark_to_logical <- function(x,
 #'   [readr::parse_date()] used to parse a concatenated string of
 #'   `year` and `x`.
 #'
-#' @return A [Date()] vector
+#' @return A [base::Date()] vector
 #' @export
 parse_date_md <- function(x,
                           year,
